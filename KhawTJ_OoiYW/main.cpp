@@ -91,14 +91,14 @@ int main() {
 
 	try {
 		do { //main menu loop starts
-			printIntro("MAIN MENU", 0);
+			printIntro("MAIN MENU", "", 0);
 			printf("\n\t1 -> CUSTOMER MENU\n\t2 -> MANAGER MENU\n");
 			printBreak();
 			nSel = validIpt(-1, 2);
 			switch (nSel) {
 			case 1: //customer menu
 				do { //customer menu loop starts
-					printIntro("MAIN MENU > CUSTOMER MENU", 0);
+					printIntro("MAIN MENU > CUSTOMER MENU", "", 0);
 					printf("\n\t1 -> DEPOSITS\n\t2 -> WITHDRAWALS/TRANSFERS\n");
 					printBreak();
 					nSel = validIpt(-1, 2);
@@ -106,7 +106,7 @@ int main() {
 					case 1: //deposits subsystem
 						nATM = randomATM(1);
 						do { //deposits subsystem loop starts
-							printIntro("MAIN MENU > CUSTOMER MENU > DEPOSITS SUBSYSTEM", nATM);
+							printIntro("MAIN MENU > CUSTOMER MENU > DEPOSITS SUBSYSTEM", "", nATM);
 							printf("\n\t1 -> CASH DEPOSITS\n\t2 -> CHEQUE DEPOSITS\n");
 							printBreak();
 							nSel = validIpt(-1, 2);
@@ -127,7 +127,7 @@ int main() {
 					case 2: //withdrawals/transfers subsystem
 						nATM = randomATM(2);
 						do { //withdrawals/transfers subsystem loop starts
-							printIntro("MAIN MENU > CUSTOMER MENU > WITHDRAWALS/TRANSFERS SUBSYSTEM", nATM);
+							printIntro("MAIN MENU > CUSTOMER MENU > WITHDRAWALS/TRANSFERS SUBSYSTEM", "", nATM);
 							printf("\n\t1 -> CASH WITHDRAWAL\n\t2 -> CASH/FUNDS TRANSFER\n");
 							printBreak();
 							nSel = validIpt(-1, 2);
@@ -157,14 +157,14 @@ int main() {
 				continue;
 			case 2: //manager menu
 				do { //manager menu loop starts
-					printIntro("MAIN MENU > MANAGER MENU", 0);
+					printIntro("MAIN MENU > MANAGER MENU", "", 0);
 					printf("\n\t1 -> PRINT TRANSACTION LOGS\n\t2 -> PERFORM UPDATES\n");
 					printBreak();
 					nSel = validIpt(-1, 2);
 					switch (nSel) {
 					case 1: //trans logs subsystem
 						do { //trans logs loop starts
-							printIntro("MAIN MENU > MANAGER MENU > PRINT TRANSACTION LOGS", 0);
+							printIntro("MAIN MENU > MANAGER MENU > PRINT TRANSACTION LOGS", "", 0);
 							printf("\n\t1 -> CASH DEPOSIT LOG\n\t2 -> CHEQUE DEPOSIT LOG\n\t3 -> WITHDRAWAL LOG\n\t4 -> FUNDS TRANSFER LOG\n");
 							printBreak();
 							nSel = validIpt(-1, 4);
@@ -186,7 +186,7 @@ int main() {
 						continue;
 					case 2: //perform updates subsystem
 						do {
-							printIntro("MAIN MENU > MANAGER MENU > PERFORM UPDATES", 0);
+							printIntro("MAIN MENU > MANAGER MENU > PERFORM UPDATES", "", 0);
 							printf("\n\t1 -> CHEQUE CLEARING\n\t2 -> HIGH WITHDRAWALS ALERT\n");
 							printBreak();
 							nSel = validIpt(-1, 2);
@@ -224,7 +224,7 @@ int main() {
 	}
 
 	catch(int) {
-		printIntro("THANK YOU FOR CHOOSING US AND HAVE A NICE DAY", 0);
+		printExit("THANK YOU FOR CHOOSING US\n    HAVE A NICE DAY");
 	}
 
 	//free the memory

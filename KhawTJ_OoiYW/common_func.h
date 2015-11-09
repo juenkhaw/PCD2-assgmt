@@ -37,16 +37,24 @@ void printTime(char c) {
 void printTime(FILE *buf) {
 	SYSTEMTIME t;
 	GetLocalTime(&t);
-	fprintf(buf, "%04d-%02d-%02d %02d:%02d:%02d\n", t.wYear, t.wMonth, t.wDay, t.wHour, t.wMinute, t.wSecond);
+	fprintf(buf, "%04d-%02d-%02d %02d:%02d:%02d", t.wYear, t.wMonth, t.wDay, t.wHour, t.wMinute, t.wSecond);
 }
 
 //print the header
-void printIntro(char* dir, int atm) {
+void printIntro(char* dir, char* name, int atm) {
 	system("cls");
-	printf("\n    WELCOME TO BANK    ");
+	printf("\n    BANKING SYSTEM    ");
 	(atm != 0) ? printf("ATM %02d     ", atm) : printf("ATM n/a    ");
 	printTime('\n');
-	printf("    %s\n\n", dir);
+	printf("    %s\n\n    WELCOME %s\n\n", dir, name);
+}
+
+//print exit screen
+void printExit(char* msg) {
+	system("cls");
+	printf("\n    BANKING SYSTEM    ATM n/a    ");
+	printTime('\n');
+	printf("    %s\n\n    <SYSTEM TERMINATED>\n\n", msg);
 }
 
 // print the fixed menu
@@ -94,4 +102,4 @@ int randomATM(int sel) {
 	return atm;
 }
 
-//uses on log-in screen
+//user log-in screen

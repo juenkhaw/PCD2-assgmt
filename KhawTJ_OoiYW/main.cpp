@@ -18,7 +18,7 @@ typedef struct {
 }BASEINFO;
 
 typedef struct {
-	int accNo, PIN;
+	char accNo[7], PIN[7];
 	char name[23], gender, adds[26], state[12], hp[12];
 	double bal;
 	TIME lastTrans;
@@ -59,12 +59,12 @@ int main() {
 		TIME *tmp2 = &cust[i].lastTrans;
 
 		//obtain the customers' details and store into "cust"
-		fscanf(custINF, "%d|%d|%[^\t]%*[^|]|%c|%[^\t]%*[^|]|%[^\t]%*[^|]|%[^|]|%lf %d-%d-%d %d:%d:%d\n", 
-			&tmp->accNo, &tmp->PIN, tmp->name, &tmp->gender, tmp->adds, tmp->state, tmp->hp, &tmp->bal,
+		fscanf(custINF, "%[^|]|%[^|]|%[^\t]%*[^|]|%c|%[^\t]%*[^|]|%[^\t]%*[^|]|%[^|]|%lf %d-%d-%d %d:%d:%d\n", 
+			tmp->accNo, tmp->PIN, tmp->name, &tmp->gender, tmp->adds, tmp->state, tmp->hp, &tmp->bal,
 			&tmp2->yr, &tmp2->mth, &tmp2->dy, &tmp2->hr, &tmp2->min, &tmp2->sec);
-		/*printf("%d\n%d\n%s\n%c\n%s\n%s\n%s\n%.2lf\n%d-%d-%d %d:%d:%d\n\n", 
-			tmp->accNo, tmp->PIN, tmp->name, tmp->gender, tmp->adds, tmp->state, tmp->hp, tmp->bal,
-			tmp2->yr, tmp2->mth, tmp2->dy, tmp2->hr, tmp2->min, tmp2->sec);*/
+		//printf("%s\n%s\n%s\n%c\n%s\n%s\n%s\n%.2lf\n%d-%d-%d %d:%d:%d\n\n", 
+		//	tmp->accNo, tmp->PIN, tmp->name, tmp->gender, tmp->adds, tmp->state, tmp->hp, tmp->bal,
+		//	tmp2->yr, tmp2->mth, tmp2->dy, tmp2->hr, tmp2->min, tmp2->sec);
 	}
 
 	try {

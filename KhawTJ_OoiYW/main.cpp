@@ -236,5 +236,7 @@ int main() {
 
 	//close the files
 	fclose(custINF);
+	fclose(mngerINF);
+	
 	return 0;
 }

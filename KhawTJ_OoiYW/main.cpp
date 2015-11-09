@@ -233,8 +233,11 @@ int main() {
 
 	//free the memory
 	delete[] cust;
+	delete[] mnger;
 
 	//close the files
 	fclose(custINF);
+	fclose(mngerINF);
+
 	return 0;
 }

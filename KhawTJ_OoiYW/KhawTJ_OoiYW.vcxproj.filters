@@ -26,14 +26,12 @@
     <ClInclude Include="manager_func.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="time_func.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="common_func.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <Text Include="Customer.txt" />
+    <Text Include="Manager.txt" />
   </ItemGroup>
 </Project>

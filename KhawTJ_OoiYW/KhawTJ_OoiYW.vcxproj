@@ -128,10 +128,10 @@
     <ClInclude Include="common_func.h" />
     <ClInclude Include="customer_func.h" />
     <ClInclude Include="manager_func.h" />
-    <ClInclude Include="time_func.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Customer.txt" />
+    <Text Include="Manager.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

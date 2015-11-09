@@ -12,6 +12,10 @@ typedef struct {
 }TIME;
 
 typedef struct {
+	char ID[7], passw[18], name[31];
+}MANAGER;
+
+typedef struct {
 	TIME t;
 	int ATM, accNo, txnCode;
 	double amt, prevBal, newBal;
@@ -42,9 +46,11 @@ int main() {
 	int entryCount = 0, nSel = -2, nAttempt = 0, nATM = 0;
 	char chSel = 'N';
 	CUSTOMER *cust;
+	MANAGER *mnger;
 
 	//file pointers
 	FILE *custINF = fopen("Customer.txt", "r");
+	FILE *mngerINF = fopen("Manager.txt", "r");
 
 	//compute the number of customers inside the "Customer.txt"
 	entryCount = countEntry(custINF);
@@ -65,6 +71,22 @@ int main() {
 		//printf("%s\n%s\n%s\n%c\n%s\n%s\n%s\n%.2lf\n%d-%d-%d %d:%d:%d\n\n", 
 		//	tmp->accNo, tmp->PIN, tmp->name, tmp->gender, tmp->adds, tmp->state, tmp->hp, tmp->bal,
 		//	tmp2->yr, tmp2->mth, tmp2->dy, tmp2->hr, tmp2->min, tmp2->sec);
+	}
+
+	//compute the number of customers inside the "Manager.txt"
+	entryCount = countEntry(mngerINF);
+
+	//declare a dynamic allocated MANAGER struct array
+	mnger = new MANAGER[entryCount];
+
+	for (int i = 0; i < entryCount; i++) {
+
+		//create struct pointer to replace mnger[i]
+		MANAGER *tmp = &mnger[i];
+
+		//obtain the managers' details and store into "mnger"
+		fscanf(mngerINF, "%[^|]|%[^\t]%*[^|]|%[^\n]\n", tmp->ID, tmp->passw, tmp->name);
+		//printf("%s\n%s\n%s\n\n", tmp->ID, tmp->passw, tmp->name);
 	}
 
 	try {
@@ -203,12 +225,12 @@ int main() {
 
 	catch(int) {
 		printIntro("THANK YOU FOR CHOOSING US AND HAVE A NICE DAY", 0);
-
-		//free the memory
-		delete[] cust;
-
-		//close the files
-		fclose(custINF);
-		return 0;
 	}
+
+	//free the memory
+	delete[] cust;
+
+	//close the files
+	fclose(custINF);
+	return 0;
 }

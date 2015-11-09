@@ -118,7 +118,7 @@ int main() {
 								break;
 							case -1: //exit
 								chSel = validIpt("TERMINATE THE CURRENT PROCESS AND QUIT?");
-								if (chSel == 'Y') throw - 1;
+								if (chSel == 'Y') throw 0;
 								continue;
 							}
 						} while (nSel != 0); //deposits subsystem loop ends
@@ -139,7 +139,7 @@ int main() {
 								break;
 							case -1: //exit
 								chSel = validIpt("TERMINATE THE CURRENT PROCESS AND QUIT?");
-								if (chSel == 'Y') throw - 1;
+								if (chSel == 'Y') throw 0;
 								continue;
 							}
 						} while (nSel != 0); //withdrawals/transfers subsystem loop ends
@@ -149,7 +149,7 @@ int main() {
 						break;
 					case -1 : //exit
 						chSel = validIpt("TERMINATE THE CURRENT PROCESS AND QUIT?");
-						if (chSel == 'Y') throw - 1;
+						if (chSel == 'Y') throw 0;
 						continue;
 					}
 				} while (nSel != 0); //customer menu loop ends
@@ -178,7 +178,7 @@ int main() {
 								break;
 							case -1: //exit
 								chSel = validIpt("TERMINATE THE CURRENT PROCESS AND QUIT?");
-								if (chSel == 'Y') throw - 1;
+								if (chSel == 'Y') throw 0;
 								continue;
 							}
 						} while (nSel != 0); //trans logs loop ends
@@ -198,7 +198,7 @@ int main() {
 								break;
 							case -1: //exit
 								chSel = validIpt("TERMINATE THE CURRENT PROCESS AND QUIT?");
-								if (chSel == 'Y') throw - 1;
+								if (chSel == 'Y') throw 0;
 								continue;
 							}
 						} while (nSel != 0);
@@ -208,7 +208,7 @@ int main() {
 						break;
 					case -1: //exit
 						chSel = validIpt("TERMINATE THE CURRENT PROCESS AND QUIT?");
-						if (chSel == 'Y') throw - 1;
+						if (chSel == 'Y') throw 0;
 						continue;
 					}
 				} while (nSel != 0); //manager menu loop ends
@@ -217,14 +217,18 @@ int main() {
 			case 0: //exit
 			case -1: //exit
 				chSel = validIpt("TERMINATE THE CURRENT PROCESS AND QUIT?");
-				if (chSel == 'Y') throw -1;
+				if (chSel == 'Y') throw 0;
 				continue;
 			};
 		} while (1); //main menu loop ends
 	}
 
-	catch(int) {
-		printExit("THANK YOU FOR CHOOSING US\n    HAVE A NICE DAY");
+	catch(int exception) {
+		if (exception == 0)
+			printExit("THANK YOU FOR CHOOSING US\n    HAVE A NICE DAY", "0");
+	}
+	catch (...) {
+		printExit("AN UNEXPECTED EXCEPTION OCCURRED", "n/a");
 	}
 
 	//free the memory

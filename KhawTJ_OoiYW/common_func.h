@@ -50,11 +50,11 @@ void printIntro(char* dir, char* name, int atm) {
 }
 
 //print exit screen
-void printExit(char* msg) {
+void printExit(char* msg, char* exp) {
 	system("cls");
 	printf("\n    BANKING SYSTEM    ATM n/a    ");
 	printTime('\n');
-	printf("    %s\n\n    <SYSTEM TERMINATED>\n\n", msg);
+	printf("    EXIT CODE : %s\n\n    %s\n\n    <SYSTEM TERMINATED>\n\n", exp, msg);
 }
 
 // print the fixed menu

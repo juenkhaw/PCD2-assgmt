@@ -24,6 +24,7 @@ typedef struct {
 typedef struct {
 	char accNo[7], PIN[7];
 	char name[23], gender, adds[26], state[12], hp[12];
+	int lock;
 	double bal;
 	TIME lastTrans;
 }CUSTOMER;
@@ -43,10 +44,16 @@ int main() {
 	printf("\n\tINITIALIZING...\n");
 
 	//variables
-	int entryCount = 0, nSel = -2, nAttempt = 0, nATM = 0;
+	int entryCount = 0, nSel = 0, nAttempt = 0, nATM = 0;
 	char chSel = 'N';
 	CUSTOMER *cust;
 	MANAGER *mnger;
+	CUSTOMER *custPtr;
+	MANAGER *mngerPtr;
+
+	//variables for deposits
+
+	//variables for withdrawals
 
 	//file pointers
 	FILE *custINF = fopen("Customer.txt", "r");
@@ -65,13 +72,15 @@ int main() {
 		TIME *tmp2 = &cust[i].lastTrans;
 
 		//obtain the customers' details and store into "cust"
-		fscanf(custINF, "%[^|]|%[^|]|%[^\t]%*[^|]|%c|%[^\t]%*[^|]|%[^\t]%*[^|]|%[^|]|%lf %d-%d-%d %d:%d:%d\n", 
-			tmp->accNo, tmp->PIN, tmp->name, &tmp->gender, tmp->adds, tmp->state, tmp->hp, &tmp->bal,
+		fscanf(custINF, "%[^|]|%[^|]|%[^\t]%*[^|]|%c|%[^\t]%*[^|]|%[^\t]%*[^|]|%[^|]|%d|%lf %d-%d-%d %d:%d:%d\n", 
+			tmp->accNo, tmp->PIN, tmp->name, &tmp->gender, tmp->adds, tmp->state, tmp->hp, &tmp->lock, &tmp->bal,
 			&tmp2->yr, &tmp2->mth, &tmp2->dy, &tmp2->hr, &tmp2->min, &tmp2->sec);
-		//printf("%s\n%s\n%s\n%c\n%s\n%s\n%s\n%.2lf\n%d-%d-%d %d:%d:%d\n\n", 
-		//	tmp->accNo, tmp->PIN, tmp->name, tmp->gender, tmp->adds, tmp->state, tmp->hp, tmp->bal,
+		//printf("%s\n%s\n%s\n%c\n%s\n%s\n%s\n%d\n%.2lf\n%d-%d-%d %d:%d:%d\n\n", 
+		//	tmp->accNo, tmp->PIN, tmp->name, tmp->gender, tmp->adds, tmp->state, tmp->hp, tmp->lock, tmp->bal,
 		//	tmp2->yr, tmp2->mth, tmp2->dy, tmp2->hr, tmp2->min, tmp2->sec);
 	}
+
+	system("pause");
 
 	//compute the number of customers inside the "Manager.txt"
 	entryCount = countEntry(mngerINF);
@@ -91,14 +100,16 @@ int main() {
 
 	try {
 		do { //main menu loop starts
-			printIntro("MAIN MENU", "", 0);
+			printHeader("MAIN MENU", "", 0);
 			printf("\n\t1 -> CUSTOMER MENU\n\t2 -> MANAGER MENU\n");
 			printBreak();
 			nSel = validIpt(-1, 2);
 			switch (nSel) {
 			case 1: //customer menu
+				//customer log-in function
+
 				do { //customer menu loop starts
-					printIntro("MAIN MENU > CUSTOMER MENU", "", 0);
+					printHeader("MAIN MENU > CUSTOMER MENU", "", 0);
 					printf("\n\t1 -> DEPOSITS\n\t2 -> WITHDRAWALS/TRANSFERS\n");
 					printBreak();
 					nSel = validIpt(-1, 2);
@@ -106,7 +117,7 @@ int main() {
 					case 1: //deposits subsystem
 						nATM = randomATM(1);
 						do { //deposits subsystem loop starts
-							printIntro("MAIN MENU > CUSTOMER MENU > DEPOSITS SUBSYSTEM", "", nATM);
+							printHeader("MAIN MENU > CUSTOMER MENU > DEPOSITS SUBSYSTEM", "", nATM);
 							printf("\n\t1 -> CASH DEPOSITS\n\t2 -> CHEQUE DEPOSITS\n");
 							printBreak();
 							nSel = validIpt(-1, 2);
@@ -127,7 +138,7 @@ int main() {
 					case 2: //withdrawals/transfers subsystem
 						nATM = randomATM(2);
 						do { //withdrawals/transfers subsystem loop starts
-							printIntro("MAIN MENU > CUSTOMER MENU > WITHDRAWALS/TRANSFERS SUBSYSTEM", "", nATM);
+							printHeader("MAIN MENU > CUSTOMER MENU > WITHDRAWALS/TRANSFERS SUBSYSTEM", "", nATM);
 							printf("\n\t1 -> CASH WITHDRAWAL\n\t2 -> CASH/FUNDS TRANSFER\n");
 							printBreak();
 							nSel = validIpt(-1, 2);
@@ -157,14 +168,14 @@ int main() {
 				continue;
 			case 2: //manager menu
 				do { //manager menu loop starts
-					printIntro("MAIN MENU > MANAGER MENU", "", 0);
+					printHeader("MAIN MENU > MANAGER MENU", "", 0);
 					printf("\n\t1 -> PRINT TRANSACTION LOGS\n\t2 -> PERFORM UPDATES\n");
 					printBreak();
 					nSel = validIpt(-1, 2);
 					switch (nSel) {
 					case 1: //trans logs subsystem
 						do { //trans logs loop starts
-							printIntro("MAIN MENU > MANAGER MENU > PRINT TRANSACTION LOGS", "", 0);
+							printHeader("MAIN MENU > MANAGER MENU > PRINT TRANSACTION LOGS", "", 0);
 							printf("\n\t1 -> CASH DEPOSIT LOG\n\t2 -> CHEQUE DEPOSIT LOG\n\t3 -> WITHDRAWAL LOG\n\t4 -> FUNDS TRANSFER LOG\n");
 							printBreak();
 							nSel = validIpt(-1, 4);
@@ -186,7 +197,7 @@ int main() {
 						continue;
 					case 2: //perform updates subsystem
 						do {
-							printIntro("MAIN MENU > MANAGER MENU > PERFORM UPDATES", "", 0);
+							printHeader("MAIN MENU > MANAGER MENU > PERFORM UPDATES", "", 0);
 							printf("\n\t1 -> CHEQUE CLEARING\n\t2 -> HIGH WITHDRAWALS ALERT\n");
 							printBreak();
 							nSel = validIpt(-1, 2);

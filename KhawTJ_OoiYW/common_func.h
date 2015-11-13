@@ -1,12 +1,19 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <time.h>
+#include <string.h>
 #include <Windows.h>
 
 //replace fflush(stdin)
 inline void discard_junk() {
 	char c;
 	while ((c = getchar()) != '\n'&&c != EOF);
+}
+
+//processing screen
+void printProcessing() {
+	system("cls");
+	printf("\n\tPROCESSING...\n");
 }
 
 //reset the value
@@ -26,7 +33,7 @@ int countEntry(FILE *buf) {
 	return count;
 }
 
-//print the time on a console with a fixed format
+//print the time on a console with a fixed format : c can only be ' ' or '\n'
 void printTime(char c) {
 	SYSTEMTIME t;
 	GetLocalTime(&t);
@@ -40,8 +47,8 @@ void printTime(FILE *buf) {
 	fprintf(buf, "%04d-%02d-%02d %02d:%02d:%02d", t.wYear, t.wMonth, t.wDay, t.wHour, t.wMinute, t.wSecond);
 }
 
-//print the header
-void printIntro(char* dir, char* name, int atm) {
+//print the header : name and atm can leave empty
+void printHeader(char* dir, char* name, int atm) {
 	system("cls");
 	printf("\n    BANKING SYSTEM    ");
 	(atm != 0) ? printf("ATM %02d     ", atm) : printf("ATM n/a    ");
@@ -49,7 +56,7 @@ void printIntro(char* dir, char* name, int atm) {
 	printf("    %s\n\n    WELCOME %s\n\n", dir, name);
 }
 
-//print exit screen
+//print exit screen : exp is to determine exit code
 void printExit(char* msg, char* exp) {
 	system("cls");
 	printf("\n    BANKING SYSTEM    ATM n/a    ");
@@ -101,5 +108,23 @@ int randomATM(int sel) {
 	atm = rand() % 5 + ((sel == 1) ? 1 : 6);
 	return atm;
 }
+//subsystem inside the log-in function : do not use in main.cpp
+int breakLogIn(char *ipt) {
+	if (strcmp(ipt, "0") == 0)
+		return -1;
+	if (strcmp(ipt, "-1") == 0)
+		throw 0;
+}
 
-//user log-in screen
+//customer log-in function
+//int logIn(CUSTOMER *buf) {
+//	int index = 0;
+//	char *accNo, *pinNo;
+//	do {
+//		printf("    PLEASE ENTER YOUR ACC. NO. > ");
+//		scanf("%[^\n]", accNo);
+//		index = breakLogIn(accNo);
+//		if (index == -1) return 0;
+//	} while (1);
+//
+//}

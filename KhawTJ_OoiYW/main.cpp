@@ -47,11 +47,11 @@ int main() {
 	int custCount = 0, mngerCount = 0;
 	int nSel = 0, nAttempt = 0, nATM = 0;
 	char chSel = 'N';
-	char *accNo, *pinNo;
+	char accNo[7], pinNo[18];
 	CUSTOMER *cust;
 	MANAGER *mnger;
-	CUSTOMER *custPtr;
-	MANAGER *mngerPtr;
+	CUSTOMER *currCust;
+	MANAGER *currMnger;
 
 	//variables for deposits
 
@@ -82,8 +82,6 @@ int main() {
 		//	tmp2->yr, tmp2->mth, tmp2->dy, tmp2->hr, tmp2->min, tmp2->sec);
 	}
 
-	system("pause");
-
 	//compute the number of customers inside the "Manager.txt"
 	mngerCount = countEntry(mngerINF);
 
@@ -108,12 +106,45 @@ int main() {
 			nSel = validIpt(-1, 2);
 			switch (nSel) {
 			case 1: //customer menu
+				currCust = nullptr;
 				//customer log-in function
 				printHeader("LOG-IN : CUSTOMER", "", 0);
-				printf("    PLEASE ENTER YOUR ACC. NO. > ");
+				printf("\t0 -> BACK\n\n    PLEASE ENTER YOUR ACC. NO. > ");
 				scanf("%[^\n]", accNo);
+				discard_junk();
+				if (strcmp(accNo, "0") == 0)
+					continue;
+				for (int i = 0; i < custCount; i++) {
+					if (strcmp(accNo, cust[i].accNo) == 0) {
+						currCust = &cust[i];
+						break;
+					}
+				}
+				if (currCust == nullptr) {
+					printHeader("ERROR", "", 0);
+					printf("  THE ACC. NO. YOU HAVE ENTERED HAS NOT FOUND/INVALID\n\n  ACC. NO. : %s\n\n  PLEASE TRY AGAIN\n", accNo);
+					readKey();
+					continue;
+				}
+				do {
+					printHeader("LOG-IN : CUSTOMER", "", 0);
+					printf("\t0 -> BACK\n\n    PLEASE ENTER PIN. NO. FOR ACC. %s > ", accNo);
+					scanf("%[^\n]", pinNo);
+					discard_junk();
+					if (strcmp(pinNo, currCust->PIN) == 0)
+						break;
+					else {
+						nAttempt++;
+						currCust->lock++;
+						if (currCust->lock == 3)
+							throw - 1;
+						printf("\n  INVALID PASSWORD\n  WARNING - YOU HAVE ONLY 3 ATTEMPTS TO LOG INTO YOUR ACC.\n"
+							"  YOU HAVE %d ATTEMPT(S) LEFT\n", 3-nAttempt);
+						readKey();
+					}
+				} while (nAttempt != 3);
 				do { //customer menu loop starts
-					printHeader("MAIN MENU > CUSTOMER MENU", "", 0);
+					printHeader("MAIN MENU > CUSTOMER MENU", currCust->name, 0);
 					printf("\n\t1 -> DEPOSITS\n\t2 -> WITHDRAWALS/TRANSFERS\n");
 					printBreak();
 					nSel = validIpt(-1, 2);
@@ -121,7 +152,7 @@ int main() {
 					case 1: //deposits subsystem
 						nATM = randomATM(1);
 						do { //deposits subsystem loop starts
-							printHeader("MAIN MENU > CUSTOMER MENU > DEPOSITS SUBSYSTEM", "", nATM);
+							printHeader("MAIN MENU > CUSTOMER MENU > DEPOSITS SUBSYSTEM", currCust->name, nATM);
 							printf("\n\t1 -> CASH DEPOSITS\n\t2 -> CHEQUE DEPOSITS\n");
 							printBreak();
 							nSel = validIpt(-1, 2);
@@ -142,7 +173,7 @@ int main() {
 					case 2: //withdrawals/transfers subsystem
 						nATM = randomATM(2);
 						do { //withdrawals/transfers subsystem loop starts
-							printHeader("MAIN MENU > CUSTOMER MENU > WITHDRAWALS/TRANSFERS SUBSYSTEM", "", nATM);
+							printHeader("MAIN MENU > CUSTOMER MENU > WITHDRAWALS/TRANSFERS SUBSYSTEM", currCust->name, nATM);
 							printf("\n\t1 -> CASH WITHDRAWAL\n\t2 -> CASH/FUNDS TRANSFER\n");
 							printBreak();
 							nSel = validIpt(-1, 2);
@@ -239,12 +270,20 @@ int main() {
 	}
 
 	catch(int exception) {
-		if (exception == 0)
-			printExit("THANK YOU FOR CHOOSING US\n    HAVE A NICE DAY", "0");
+		if (exception == 0) {
+			printExit("THANK YOU FOR CHOOSING US\n  HAVE A NICE DAY", "0");
+		}
+		if (exception == -1) {
+			printExit("SORRY, YOU HAVE FAILED TO LOG INTO THE ACC WITHIN 3 ATTEMPTS", "-1");
+			printf("  THE ACC. BELOW HAS LOCKED FOR SECURITY CONCERN\n\n\t  ACC. NO. : %s\n\n"
+				"  PLEASE CONTACT A QUALIFIED MANAGER/STAFF IN ORDER TO UNLOCK THE ACC. ABOVE\n\n", accNo);
+		}
 	}
 	catch (...) {
 		printExit("AN UNEXPECTED EXCEPTION OCCURRED", "n/a");
 	}
+
+	printf("\t\t<SYSTEM TERMINATED>\n\n");
 
 	//free the memory
 	delete[] cust;

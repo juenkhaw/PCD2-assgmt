@@ -10,10 +10,10 @@ inline void discard_junk() {
 	while ((c = getchar()) != '\n'&&c != EOF);
 }
 
-//processing screen
-void printProcessing() {
-	system("cls");
-	printf("\n\tPROCESSING...\n");
+//read any key from user
+void readKey() {
+	printf("\n  PRESS ANY KEY TO CONTINUE...\n");
+	system("pause>nul");
 }
 
 //reset the value
@@ -50,18 +50,18 @@ void printTime(FILE *buf) {
 //print the header : name and atm can leave empty
 void printHeader(char* dir, char* name, int atm) {
 	system("cls");
-	printf("\n    BANKING SYSTEM    ");
+	printf("\n  BANKING SYSTEM    ");
 	(atm != 0) ? printf("ATM %02d     ", atm) : printf("ATM n/a    ");
 	printTime('\n');
-	printf("    %s\n\n    WELCOME %s\n\n", dir, name);
+	printf("  WELCOME %s\n\n  %s\n\n", name, dir);
 }
 
 //print exit screen : exp is to determine exit code
 void printExit(char* msg, char* exp) {
 	system("cls");
-	printf("\n    BANKING SYSTEM    ATM n/a    ");
+	printf("\n  BANKING SYSTEM    ATM n/a    ");
 	printTime('\n');
-	printf("    EXIT CODE : %s\n\n    %s\n\n    <SYSTEM TERMINATED>\n\n", exp, msg);
+	printf("  EXIT CODE : %s\n\n  %s\n\n", exp, msg);
 }
 
 // print the fixed menu

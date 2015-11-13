@@ -38,4 +38,7 @@ ADDITIONAL
 - Change passw
 - Tranaction Record (every single transactions)
 
-<h2>Happy coding :D</h2>
+<h3><strong>Design</strong></h3>
+- printHeader()
+- printExit()
+- Other etc. adjustment

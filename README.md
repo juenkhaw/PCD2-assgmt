@@ -2,7 +2,7 @@
 <h1>TO-DO LIST</h1>
 
 <h3><strong>Main Menu</strong></h3>
-<s>- Interactive main menu</s>
+- <s>Interactive main menu</s>
 
 <h3><strong>Log-in Function</strong></h3>
 - Lock the account once user have been key in wrong password for 3 times.

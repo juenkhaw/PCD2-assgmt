@@ -2,10 +2,10 @@
 <h1>TO-DO LIST</h1>
 
 <h3><strong>Main Menu</strong></h3>
-- Interactive main menu
+<s>- Interactive main menu</s>
 
 <h3><strong>Log-in Function</strong></h3>
-- Lock the acc once user have been key in wrong passw for 3 times.
+- Lock the account once user have been key in wrong password for 3 times.
 
 <h3><strong>Customer Functions</strong></h3>
 
@@ -37,4 +37,5 @@ ADDITIONAL
 - Register for customer/manager
 - Change passw
 - Tranaction Record (every single transactions)
+
 <h2>Happy coding :D</h2>

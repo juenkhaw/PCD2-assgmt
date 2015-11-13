@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <conio.h>
 #include <Windows.h>
 
 //replace fflush(stdin)
@@ -17,10 +18,9 @@ void readKey() {
 }
 
 //reset the value
-void reset(char *chSel, int *nSel, int *nAttempt, int *nATM) {
+void reset(char *chSel, int *nSel, int *nATM) {
 	*chSel = 'N';
 	*nSel = -2;
-	*nAttempt = 0;
 	*nATM = 0;
 }
 
@@ -47,7 +47,7 @@ void printTime(FILE *buf) {
 	fprintf(buf, "%04d-%02d-%02d %02d:%02d:%02d", t.wYear, t.wMonth, t.wDay, t.wHour, t.wMinute, t.wSecond);
 }
 
-//print the header : name and atm can leave empty
+//print the header : leave name and atm empty if there is no deposit or withdrawal customer function
 void printHeader(char* dir, char* name, int atm) {
 	system("cls");
 	printf("\n  BANKING SYSTEM    ");
@@ -108,3 +108,19 @@ int randomATM(int sel) {
 	atm = rand() % 5 + ((sel == 1) ? 1 : 6);
 	return atm;
 }
+
+//accept password and return
+//char *readPass(int limit) {
+//	char c, passw[18];
+//	for (int i = 0; i < limit; i++) {
+//		c = _getch();
+//		passw[i] = c;
+//		if (c == '\n') {
+//			passw[i] = '\0';
+//			break;
+//		}
+//	}
+//	c = '*';
+//	printf("%c", c);
+//	return passw;
+//}

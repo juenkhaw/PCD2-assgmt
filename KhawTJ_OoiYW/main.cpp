@@ -45,7 +45,7 @@ int main() {
 
 	//variables
 	int custCount = 0, mngerCount = 0;
-	int nSel = 0, nAttempt = 0, nATM = 0;
+	int nSel = 0, nATM = 0;
 	char chSel = 'N';
 	char accNo[7], pinNo[18];
 	CUSTOMER *cust;
@@ -106,43 +106,57 @@ int main() {
 			nSel = validIpt(-1, 2);
 			switch (nSel) {
 			case 1: //customer menu
-				currCust = nullptr;
 				//customer log-in function
+
+				//reset the current customer pointer to null
+				currCust = nullptr;
 				printHeader("LOG-IN : CUSTOMER", "", 0);
 				printf("\t0 -> BACK\n\n    PLEASE ENTER YOUR ACC. NO. > ");
 				scanf("%[^\n]", accNo);
 				discard_junk();
+
+				//the system will jump back to main menu if user key in "0"
 				if (strcmp(accNo, "0") == 0)
 					continue;
+
+				//check for the existance of the acc. no. entered by user
 				for (int i = 0; i < custCount; i++) {
 					if (strcmp(accNo, cust[i].accNo) == 0) {
 						currCust = &cust[i];
 						break;
 					}
 				}
+
+				//if the acc. no. not found, system shall prompt user for key in again
 				if (currCust == nullptr) {
 					printHeader("ERROR", "", 0);
 					printf("  THE ACC. NO. YOU HAVE ENTERED HAS NOT FOUND/INVALID\n\n  ACC. NO. : %s\n\n  PLEASE TRY AGAIN\n", accNo);
 					readKey();
 					continue;
 				}
+
+				//if the acc. no. is valid, user is prompted for entering password
 				do {
 					printHeader("LOG-IN : CUSTOMER", "", 0);
 					printf("\t0 -> BACK\n\n    PLEASE ENTER PIN. NO. FOR ACC. %s > ", accNo);
 					scanf("%[^\n]", pinNo);
 					discard_junk();
+					if (strcmp(pinNo, "0") == 0)
+						break;
 					if (strcmp(pinNo, currCust->PIN) == 0)
 						break;
 					else {
-						nAttempt++;
 						currCust->lock++;
+						//if the user has been failed to log into the acc. for 3 times, the system shall lock the acc.
 						if (currCust->lock == 3)
 							throw - 1;
 						printf("\n  INVALID PASSWORD\n  WARNING - YOU HAVE ONLY 3 ATTEMPTS TO LOG INTO YOUR ACC.\n"
-							"  YOU HAVE %d ATTEMPT(S) LEFT\n", 3-nAttempt);
+							"  YOU HAVE %d ATTEMPT(S) LEFT\n", 3-currCust->lock);
 						readKey();
 					}
-				} while (nAttempt != 3);
+				} while (currCust->lock != 3);
+				if (strcmp(pinNo, "0") == 0)
+					continue;
 				do { //customer menu loop starts
 					printHeader("MAIN MENU > CUSTOMER MENU", currCust->name, 0);
 					printf("\n\t1 -> DEPOSITS\n\t2 -> WITHDRAWALS/TRANSFERS\n");
@@ -168,7 +182,7 @@ int main() {
 								continue;
 							}
 						} while (nSel != 0); //deposits subsystem loop ends
-						reset(&chSel, &nSel, &nAttempt, &nATM);
+						reset(&chSel, &nSel, &nATM);
 						continue;
 					case 2: //withdrawals/transfers subsystem
 						nATM = randomATM(2);
@@ -189,7 +203,7 @@ int main() {
 								continue;
 							}
 						} while (nSel != 0); //withdrawals/transfers subsystem loop ends
-						reset(&chSel, &nSel, &nAttempt, &nATM);
+						reset(&chSel, &nSel, &nATM);
 						continue;
 					case 0: //back
 						break;
@@ -199,9 +213,50 @@ int main() {
 						continue;
 					}
 				} while (nSel != 0); //customer menu loop ends
-				reset(&chSel, &nSel, &nAttempt, &nATM);
+				reset(&chSel, &nSel, &nATM);
 				continue;
 			case 2: //manager menu
+				//manager log-in function
+
+				//reset the current manager pointer to null
+				currMnger = nullptr;
+				printHeader("LOG-IN : MANAGER", "", 0);
+				printf("\t0 -> BACK\n\n    PLEASE ENTER YOUR ID. NO. > ");
+				scanf("%[^\n]", accNo);
+				discard_junk();
+
+				//back to the main menu if user has entered "0"
+				if (strcmp(accNo, "0") == 0)
+					continue;
+				for (int i = 0; i < mngerCount; i++) {
+					if (strcmp(accNo, mnger[i].ID) == 0) {
+						currMnger = &mnger[i];
+						break;
+					}
+				}
+
+				//if ID. no. is invalid, user is prompted to enter again
+				if (currMnger == nullptr) {
+					printHeader("ERROR", "", 0);
+					printf("  THE ID. NO. YOU HAVE ENTERED HAS NOT FOUND/INVALID\n\n  ACC. NO. : %s\n\n  PLEASE TRY AGAIN\n", accNo);
+					readKey();
+					continue;
+				}
+
+				//if the ID. no. is valid, user is required to enter password.
+				do {
+					printf("    PLEASE ENTER PASSW. > ");
+					scanf("%[^\n]", pinNo);
+					discard_junk();
+					if (strcmp(pinNo, "0") == 0)
+						break;
+
+					//compare the passsword entered and the exact password
+					if (strcmp(pinNo, currMnger->passw) == 0)
+						break;
+				} while (printf("\n  INVALID PASSWORD - PLEASE TRY AGAIN\n"));
+				if (strcmp(pinNo, "0") == 0)
+					continue;
 				do { //manager menu loop starts
 					printHeader("MAIN MENU > MANAGER MENU", "", 0);
 					printf("\n\t1 -> PRINT TRANSACTION LOGS\n\t2 -> PERFORM UPDATES\n");
@@ -228,7 +283,7 @@ int main() {
 								continue;
 							}
 						} while (nSel != 0); //trans logs loop ends
-						reset(&chSel, &nSel, &nAttempt, &nATM);
+						reset(&chSel, &nSel, &nATM);
 						continue;
 					case 2: //perform updates subsystem
 						do {
@@ -248,7 +303,7 @@ int main() {
 								continue;
 							}
 						} while (nSel != 0);
-						reset(&chSel, &nSel, &nAttempt, &nATM);
+						reset(&chSel, &nSel, &nATM);
 						continue;
 					case 0: //back
 						break;
@@ -258,7 +313,7 @@ int main() {
 						continue;
 					}
 				} while (nSel != 0); //manager menu loop ends
-				reset(&chSel, &nSel, &nAttempt, &nATM);
+				reset(&chSel, &nSel, &nATM);
 				continue;
 			case 0: //exit
 			case -1: //exit
@@ -274,7 +329,7 @@ int main() {
 			printExit("THANK YOU FOR CHOOSING US\n  HAVE A NICE DAY", "0");
 		}
 		if (exception == -1) {
-			printExit("SORRY, YOU HAVE FAILED TO LOG INTO THE ACC WITHIN 3 ATTEMPTS", "-1");
+			printExit("SORRY! YOU HAVE FAILED TO LOG INTO THE ACC. WITHIN 3 ATTEMPTS", "-1");
 			printf("  THE ACC. BELOW HAS LOCKED FOR SECURITY CONCERN\n\n\t  ACC. NO. : %s\n\n"
 				"  PLEASE CONTACT A QUALIFIED MANAGER/STAFF IN ORDER TO UNLOCK THE ACC. ABOVE\n\n", accNo);
 		}

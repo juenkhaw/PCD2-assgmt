@@ -44,8 +44,10 @@ int main() {
 	printf("\n\tINITIALIZING...\n");
 
 	//variables
-	int entryCount = 0, nSel = 0, nAttempt = 0, nATM = 0;
+	int custCount = 0, mngerCount = 0;
+	int nSel = 0, nAttempt = 0, nATM = 0;
 	char chSel = 'N';
+	char *accNo, *pinNo;
 	CUSTOMER *cust;
 	MANAGER *mnger;
 	CUSTOMER *custPtr;
@@ -60,12 +62,12 @@ int main() {
 	FILE *mngerINF = fopen("Manager.txt", "r");
 
 	//compute the number of customers inside the "Customer.txt"
-	entryCount = countEntry(custINF);
+	custCount = countEntry(custINF);
 
 	//declare a dynamic allocated CUSTOMER struct array
-	cust = new CUSTOMER[entryCount];
+	cust = new CUSTOMER[custCount];
 
-	for (int i = 0; i < entryCount; i++) {
+	for (int i = 0; i < custCount; i++) {
 
 		//create struct pointer to replace customer[i] and customer[i].lastTrans
 		CUSTOMER *tmp = &cust[i];
@@ -83,12 +85,12 @@ int main() {
 	system("pause");
 
 	//compute the number of customers inside the "Manager.txt"
-	entryCount = countEntry(mngerINF);
+	mngerCount = countEntry(mngerINF);
 
 	//declare a dynamic allocated MANAGER struct array
-	mnger = new MANAGER[entryCount];
+	mnger = new MANAGER[mngerCount];
 
-	for (int i = 0; i < entryCount; i++) {
+	for (int i = 0; i < mngerCount; i++) {
 
 		//create struct pointer to replace mnger[i]
 		MANAGER *tmp = &mnger[i];
@@ -107,7 +109,9 @@ int main() {
 			switch (nSel) {
 			case 1: //customer menu
 				//customer log-in function
-
+				printHeader("LOG-IN : CUSTOMER", "", 0);
+				printf("    PLEASE ENTER YOUR ACC. NO. > ");
+				scanf("%[^\n]", accNo);
 				do { //customer menu loop starts
 					printHeader("MAIN MENU > CUSTOMER MENU", "", 0);
 					printf("\n\t1 -> DEPOSITS\n\t2 -> WITHDRAWALS/TRANSFERS\n");

@@ -108,23 +108,3 @@ int randomATM(int sel) {
 	atm = rand() % 5 + ((sel == 1) ? 1 : 6);
 	return atm;
 }
-//subsystem inside the log-in function : do not use in main.cpp
-int breakLogIn(char *ipt) {
-	if (strcmp(ipt, "0") == 0)
-		return -1;
-	if (strcmp(ipt, "-1") == 0)
-		throw 0;
-}
-
-//customer log-in function
-//int logIn(CUSTOMER *buf) {
-//	int index = 0;
-//	char *accNo, *pinNo;
-//	do {
-//		printf("    PLEASE ENTER YOUR ACC. NO. > ");
-//		scanf("%[^\n]", accNo);
-//		index = breakLogIn(accNo);
-//		if (index == -1) return 0;
-//	} while (1);
-//
-//}

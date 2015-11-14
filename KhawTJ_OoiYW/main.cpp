@@ -23,6 +23,7 @@ int main() {
 	//file pointers
 	FILE *custINF;
 	FILE *mngerINF;
+	FILE *test = fopen("test.txt", "w+");
 
 	//variables for deposits
 
@@ -31,7 +32,7 @@ int main() {
 	try { //start to seek for the runtime error and point to terminate the system
 
 		//file pointers and validation
-		custINF = fopen("Customer.txt", "r");
+		custINF = fopen("Customer.txt", "r+");
 		if (!custINF) throw - 11;
 		mngerINF = fopen("Manager.txt", "r");
 		if (!mngerINF) throw - 12;
@@ -286,6 +287,8 @@ int main() {
 		printExit("AN UNEXPECTED EXCEPTION OCCURRED", "n/a");
 	}
 
+	writeF(test, cust, custCount);
+
 	printf("\t\t<SYSTEM TERMINATED>\n\n");
 
 	//free the memory
@@ -295,6 +298,7 @@ int main() {
 	//close the files
 	fclose(custINF);
 	fclose(mngerINF);
+	fclose(test);
 	
 	return 0;
 }

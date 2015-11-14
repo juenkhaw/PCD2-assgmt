@@ -142,7 +142,7 @@ CUSTOMER* readF(FILE *buf, int *size, CUSTOMER *tag) {
 		TIME *tmp2 = &storage[i].lastTrans;
 
 		//obtain the customers' details and store into "cust"
-		check = fscanf(buf, "%[^|]|%[^|]|%[^\t]%*[^|]|%c|%[^\t]%*[^|]|%[^\t]%*[^|]|%[^|]|%d|%lf %d-%d-%d %d:%d:%d\n",
+		check = fscanf(buf, "%[^|]|%[^|]|%[^_]%*[^|]|%c|%[^_]%*[^|]|%[^_]%*[^|]|%[^|]|%d|%lf %d-%d-%d %d:%d:%d\n",
 			tmp->accNo, tmp->PIN, tmp->name, &tmp->gender, tmp->adds, tmp->state, tmp->hp, &tmp->lock, &tmp->bal,
 			&tmp2->yr, &tmp2->mth, &tmp2->dy, &tmp2->hr, &tmp2->min, &tmp2->sec);
 		printf("%s\n%s\n%s\n%c\n%s\n%s\n%s\n%d\n%.2lf\n%d-%d-%d %d:%d:%d\n\n", 
@@ -171,7 +171,7 @@ MANAGER* readF(FILE *buf, int *size, MANAGER *tag) {
 		MANAGER *tmp = &storage[i];
 
 		//obtain the managers' details and store into "mnger"
-		check = fscanf(buf, "%[^|]|%[^\t]%*[^|]|%[^\n]\n", tmp->ID, tmp->passw, tmp->name);
+		check = fscanf(buf, "%[^|]|%[^_]%*[^|]|%[^\n]\n", tmp->ID, tmp->passw, tmp->name);
 		//printf("%s\n%s\n%s\n\n", tmp->ID, tmp->passw, tmp->name);
 
 		//if there is possible lost data, return the error code
@@ -181,6 +181,12 @@ MANAGER* readF(FILE *buf, int *size, MANAGER *tag) {
 }
 
 //write and update customer.txt
-void writeF(FILE *buf, CUSTOMER *storage) {
-
+void writeF(FILE *buf, CUSTOMER *storage, int size) {
+	for (int i = 0; i < size; i++) {
+		CUSTOMER *tmp = &storage[i];
+		TIME *tmp2 = &storage[i].lastTrans;
+		fprintf(buf, "%5s|%5s|%-35s\t|%c|%-28s\t|%-13s\t|%s|%d|%08.2lf %02d-%02d-%04d %02d:%02d:%02d\n",
+			tmp->accNo, tmp->PIN, strcat(tmp->name, "_"), tmp->gender, strcat(tmp->adds, "_"), strcat(tmp->state, "_"), tmp->hp, tmp->lock, tmp->bal,
+			tmp2->dy, tmp2->mth, tmp2->yr, tmp2->hr, tmp2->min, tmp2->sec);
+	}
 }

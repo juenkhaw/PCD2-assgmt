@@ -16,7 +16,7 @@ typedef struct {
 
 typedef struct {
 	char accNo[7], PIN[7];
-	char name[23], gender, adds[26], state[12], hp[12];
+	char name[36], gender, adds[29], state[14], hp[12];
 	int lock;
 	double bal;
 	TIME lastTrans;

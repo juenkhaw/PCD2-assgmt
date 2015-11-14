@@ -37,7 +37,7 @@ ADDITIONAL
 - Unlock the locked account
 - Register for customer/manager
 - Change passw
-- Tranaction Record (every single transactions)
+- Flow of funds of the customers (all of the transactions etc.)
 
 <h3><strong>Design</strong></h3>
 - printHeader()

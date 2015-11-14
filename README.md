@@ -5,7 +5,7 @@
 - <s>Interactive main menu</s>
 
 <h3><strong>Log-in Function</strong></h3>
-- Lock the account once user have been key in wrong password for 3 times.
+- <s>Lock the account once user have been key in wrong password for 3 times.</s>
 
 <h3><strong>Customer Functions</strong></h3>
 
@@ -38,4 +38,7 @@ ADDITIONAL
 - Change passw
 - Tranaction Record (every single transactions)
 
-<h2>Happy coding :D</h2>
+<h3><strong>Design</strong></h3>
+- printHeader()
+- printExit()
+- Other etc. adjustment

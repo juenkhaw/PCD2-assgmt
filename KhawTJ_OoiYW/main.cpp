@@ -10,13 +10,13 @@
 int main() {
 	printf("\n\tINITIALIZING...\n");
 
-	//variables
+	//normal variables
 	int custCount = 0, mngerCount = 0;
 	int nSel = 0, nATM = 0;
 	char chSel = 'N';
 	char accNo[7], pinNo[18];
-	CUSTOMER *cust;
-	MANAGER *mnger;
+	CUSTOMER *cust = 0;
+	MANAGER *mnger = 0;
 	CUSTOMER *currCust;
 	MANAGER *currMnger;
 
@@ -28,43 +28,14 @@ int main() {
 	FILE *custINF = fopen("Customer.txt", "r");
 	FILE *mngerINF = fopen("Manager.txt", "r");
 
-	//compute the number of customers inside the "Customer.txt"
-	custCount = countEntry(custINF);
+	//initializing process
+	//read and store the data from "Customer.txt"
+	cust = readF(custINF, &custCount, cust);
 
-	//declare a dynamic allocated CUSTOMER struct array
-	cust = new CUSTOMER[custCount];
+	//read and store the data from "Manager.txt"
+	mnger = readF(mngerINF, &mngerCount, mnger);
 
-	for (int i = 0; i < custCount; i++) {
-
-		//create struct pointer to replace customer[i] and customer[i].lastTrans
-		CUSTOMER *tmp = &cust[i];
-		TIME *tmp2 = &cust[i].lastTrans;
-
-		//obtain the customers' details and store into "cust"
-		fscanf(custINF, "%[^|]|%[^|]|%[^\t]%*[^|]|%c|%[^\t]%*[^|]|%[^\t]%*[^|]|%[^|]|%d|%lf %d-%d-%d %d:%d:%d\n", 
-			tmp->accNo, tmp->PIN, tmp->name, &tmp->gender, tmp->adds, tmp->state, tmp->hp, &tmp->lock, &tmp->bal,
-			&tmp2->yr, &tmp2->mth, &tmp2->dy, &tmp2->hr, &tmp2->min, &tmp2->sec);
-		//printf("%s\n%s\n%s\n%c\n%s\n%s\n%s\n%d\n%.2lf\n%d-%d-%d %d:%d:%d\n\n", 
-		//	tmp->accNo, tmp->PIN, tmp->name, tmp->gender, tmp->adds, tmp->state, tmp->hp, tmp->lock, tmp->bal,
-		//	tmp2->yr, tmp2->mth, tmp2->dy, tmp2->hr, tmp2->min, tmp2->sec);
-	}
-
-	//compute the number of customers inside the "Manager.txt"
-	mngerCount = countEntry(mngerINF);
-
-	//declare a dynamic allocated MANAGER struct array
-	mnger = new MANAGER[mngerCount];
-
-	for (int i = 0; i < mngerCount; i++) {
-
-		//create struct pointer to replace mnger[i]
-		MANAGER *tmp = &mnger[i];
-
-		//obtain the managers' details and store into "mnger"
-		fscanf(mngerINF, "%[^|]|%[^\t]%*[^|]|%[^\n]\n", tmp->ID, tmp->passw, tmp->name);
-		//printf("%s\n%s\n%s\n\n", tmp->ID, tmp->passw, tmp->name);
-	}
-
+	//main processing loop
 	try {
 		do { //main menu loop starts
 			printHeader("MAIN MENU", "", 0);
@@ -73,8 +44,8 @@ int main() {
 			nSel = validIpt(-1, 2);
 			switch (nSel) {
 			case 1: //customer menu
-				//customer log-in function
 
+				//customer log-in function
 				//reset the current customer pointer to null
 				currCust = nullptr;
 				printHeader("LOG-IN : CUSTOMER", "", 0);
@@ -183,8 +154,8 @@ int main() {
 				reset(&chSel, &nSel, &nATM);
 				continue;
 			case 2: //manager menu
-				//manager log-in function
 
+				//manager log-in function
 				//reset the current manager pointer to null
 				currMnger = nullptr;
 				printHeader("LOG-IN : MANAGER", "", 0);
@@ -205,7 +176,7 @@ int main() {
 				//if ID. no. is invalid, user is prompted to enter again
 				if (currMnger == nullptr) {
 					printHeader("ERROR", "", 0);
-					printf("  THE ID. NO. YOU HAVE ENTERED HAS NOT FOUND/INVALID\n\n  ACC. NO. : %s\n\n  PLEASE TRY AGAIN\n", accNo);
+					printf("  THE ID. NO. YOU HAVE ENTERED HAS NOT FOUND/INVALID\n\n  ID. NO. : %s\n\n  PLEASE TRY AGAIN\n", accNo);
 					readKey();
 					continue;
 				}

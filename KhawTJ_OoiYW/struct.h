@@ -32,3 +32,4 @@ typedef struct {
 	BASEINFO base;
 	int recAccNo, recPrevBal, recNewBal;
 }TRANSFER;
+

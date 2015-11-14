@@ -26,27 +26,11 @@ void reset(char *chSel, int *nSel, int *nATM) {
 	*nATM = 0;
 }
 
-//compute the number of entries inside a file
-int countEntry(FILE *buf) {
-	int count = 0;
-	while (fscanf(buf, "%*[^\n]\n") != EOF)
-		count++;
-	rewind(buf);
-	return count;
-}
-
 //print the time on a console with a fixed format : c can only be ' ' or '\n'
 void printTime(char c) {
 	SYSTEMTIME t;
 	GetLocalTime(&t);
 	printf("%04d-%02d-%02d %02d:%02d:%02d\n%c", t.wYear, t.wMonth, t.wDay, t.wHour, t.wMinute, t.wSecond, c);
-}
-
-//print the time on a file with a fixed format
-void printTime(FILE *buf) {
-	SYSTEMTIME t;
-	GetLocalTime(&t);
-	fprintf(buf, "%04d-%02d-%02d %02d:%02d:%02d", t.wYear, t.wMonth, t.wDay, t.wHour, t.wMinute, t.wSecond);
 }
 
 //print the header : leave name and atm empty if there is no deposit or withdrawal customer function
@@ -111,18 +95,67 @@ int randomATM(int sel) {
 	return atm;
 }
 
-//accept password and return
-//char *readPass(int limit) {
-//	char c, passw[18];
-//	for (int i = 0; i < limit; i++) {
-//		c = _getch();
-//		passw[i] = c;
-//		if (c == '\n') {
-//			passw[i] = '\0';
-//			break;
-//		}
-//	}
-//	c = '*';
-//	printf("%c", c);
-//	return passw;
-//}
+//file r/w functions
+
+//compute the number of entries inside a file
+int countEntry(FILE *buf) {
+	int count = 0;
+	while (fscanf(buf, "%*[^\n]\n") != EOF)
+		count++;
+	rewind(buf);
+	return count;
+}
+
+//print the time on a file with a fixed format
+void printTime(FILE *buf) {
+	SYSTEMTIME t;
+	GetLocalTime(&t);
+	fprintf(buf, "%04d-%02d-%02d %02d:%02d:%02d", t.wYear, t.wMonth, t.wDay, t.wHour, t.wMinute, t.wSecond);
+}
+
+//read customer.txt and store into a struct array : parameter -> tag is just to differentiate the overloaded functions which read different files
+CUSTOMER* readF(FILE *buf, int *size, CUSTOMER *tag) {
+	CUSTOMER *storage;
+
+	//compute the number of customers inside the "Customer.txt"
+	*size = countEntry(buf);
+
+	//declare a dynamic allocated CUSTOMER struct array
+	storage = new CUSTOMER[*size];
+	for (int i = 0; i < *size; i++) {
+
+		//create struct pointer to replace customer[i] and customer[i].lastTrans
+		CUSTOMER *tmp = &storage[i];
+		TIME *tmp2 = &storage[i].lastTrans;
+
+		//obtain the customers' details and store into "cust"
+		fscanf(buf, "%[^|]|%[^|]|%[^\t]%*[^|]|%c|%[^\t]%*[^|]|%[^\t]%*[^|]|%[^|]|%d|%lf %d-%d-%d %d:%d:%d\n",
+			tmp->accNo, tmp->PIN, tmp->name, &tmp->gender, tmp->adds, tmp->state, tmp->hp, &tmp->lock, &tmp->bal,
+			&tmp2->yr, &tmp2->mth, &tmp2->dy, &tmp2->hr, &tmp2->min, &tmp2->sec);
+		printf("%s\n%s\n%s\n%c\n%s\n%s\n%s\n%d\n%.2lf\n%d-%d-%d %d:%d:%d\n\n", 
+			tmp->accNo, tmp->PIN, tmp->name, tmp->gender, tmp->adds, tmp->state, tmp->hp, tmp->lock, tmp->bal,
+			tmp2->yr, tmp2->mth, tmp2->dy, tmp2->hr, tmp2->min, tmp2->sec);
+	}
+	return storage;
+}
+
+//read manager.txt and store into a struct array
+MANAGER* readF(FILE *buf, int *size, MANAGER *tag) {
+	MANAGER *storage;
+
+	//compute the number of customers inside the "Customer.txt"
+	*size = countEntry(buf);
+
+	//declare a dynamic allocated CUSTOMER struct array
+	storage = new MANAGER[*size];
+	for (int i = 0; i < *size; i++) {
+
+		//create struct pointer to replace mnger[i]
+		MANAGER *tmp = &storage[i];
+
+		//obtain the managers' details and store into "mnger"
+		fscanf(buf, "%[^|]|%[^\t]%*[^|]|%[^\n]\n", tmp->ID, tmp->passw, tmp->name);
+		//printf("%s\n%s\n%s\n\n", tmp->ID, tmp->passw, tmp->name);
+	}
+	return storage;
+}

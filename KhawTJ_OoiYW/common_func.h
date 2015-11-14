@@ -5,6 +5,8 @@
 #include <conio.h>
 #include <Windows.h>
 
+#include "struct.h"
+
 //replace fflush(stdin)
 inline void discard_junk() {
 	char c;

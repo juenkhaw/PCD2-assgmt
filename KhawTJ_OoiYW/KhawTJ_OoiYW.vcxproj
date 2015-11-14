@@ -128,6 +128,7 @@
     <ClInclude Include="common_func.h" />
     <ClInclude Include="customer_func.h" />
     <ClInclude Include="manager_func.h" />
+    <ClInclude Include="struct.h" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="Customer.txt" />

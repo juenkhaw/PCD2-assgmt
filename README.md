@@ -6,6 +6,7 @@
 
 <h3><strong>Log-in Function</strong></h3>
 - <s>Lock the account once user have been key in wrong password for 3 times.</s>
+- Reset the password for the new account that is logged in for the first time
 
 <h3><strong>Customer Functions</strong></h3>
 
@@ -36,9 +37,9 @@ ADDITIONAL
 - Unlock the locked account
 - Register for customer/manager
 - Change passw
-- Tranaction Record (every single transactions)
+- Flow of funds of the customers (all of the transactions etc.)
 
 <h3><strong>Design</strong></h3>
 - printHeader()
 - printExit()
-- Other etc. adjustment
+- Other adjustment etc.

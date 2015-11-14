@@ -20,23 +20,30 @@ int main() {
 	CUSTOMER *currCust;
 	MANAGER *currMnger;
 
+	//file pointers
+	FILE *custINF;
+	FILE *mngerINF;
+
 	//variables for deposits
 
 	//variables for withdrawals
 
-	//file pointers
-	FILE *custINF = fopen("Customer.txt", "r");
-	FILE *mngerINF = fopen("Manager.txt", "r");
+	try { //start to seek for the runtime error and point to terminate the system
 
-	//initializing process
-	//read and store the data from "Customer.txt"
-	cust = readF(custINF, &custCount, cust);
+		//file pointers and validation
+		custINF = fopen("Customer.txt", "r");
+		if (!custINF) throw - 11;
+		mngerINF = fopen("Manager.txt", "r");
+		if (!mngerINF) throw - 12;
 
-	//read and store the data from "Manager.txt"
-	mnger = readF(mngerINF, &mngerCount, mnger);
+		//initializing process
+		//read and store the data from "Customer.txt"
+		cust = readF(custINF, &custCount, cust);
 
-	//main processing loop
-	try {
+		//read and store the data from "Manager.txt"
+		mnger = readF(mngerINF, &mngerCount, mnger);
+
+		//main processing loop
 		do { //main menu loop starts
 			printHeader("MAIN MENU", "", 0);
 			printf("\n\t1 -> CUSTOMER MENU\n\t2 -> MANAGER MENU\n");
@@ -89,7 +96,7 @@ int main() {
 						if (currCust->lock == 3)
 							throw - 1;
 						printf("\n  INVALID PASSWORD\n  WARNING - YOU HAVE ONLY 3 ATTEMPTS TO LOG INTO YOUR ACC.\n"
-							"  YOU HAVE %d ATTEMPT(S) LEFT\n", 3-currCust->lock);
+							"  YOU HAVE %d ATTEMPT(S) LEFT\n", 3 - currCust->lock);
 						readKey();
 					}
 				} while (currCust->lock != 3);
@@ -145,7 +152,7 @@ int main() {
 						continue;
 					case 0: //back
 						break;
-					case -1 : //exit
+					case -1: //exit
 						chSel = validIpt("TERMINATE THE CURRENT PROCESS AND QUIT?");
 						if (chSel == 'Y') throw 0;
 						continue;
@@ -262,7 +269,8 @@ int main() {
 		} while (1); //main menu loop ends
 	}
 
-	catch(int exception) {
+	catch (int exception) { //once error or point of termination has triggered, the code below shall excecute immediately
+		//point to termination
 		if (exception == 0) {
 			printExit("THANK YOU FOR CHOOSING US\n  HAVE A NICE DAY", "0");
 		}
@@ -271,8 +279,10 @@ int main() {
 			printf("  THE ACC. BELOW HAS LOCKED FOR SECURITY CONCERN\n\n\t  ACC. NO. : %s\n\n"
 				"  PLEASE CONTACT A QUALIFIED MANAGER/STAFF IN ORDER TO UNLOCK THE ACC. ABOVE\n\n", accNo);
 		}
+		//runtime error
+		printError(exception);
 	}
-	catch (...) {
+	catch (...) { //if any unknown error has occured
 		printExit("AN UNEXPECTED EXCEPTION OCCURRED", "n/a");
 	}
 

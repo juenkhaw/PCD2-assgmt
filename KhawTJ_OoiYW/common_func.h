@@ -95,6 +95,18 @@ int randomATM(int sel) {
 	return atm;
 }
 
+void printError(int exp) {
+	//runtime error
+	if (exp == -11)
+		printExit("EXCEPTION OCCURED - FAILED TO OPEN \"CUSTOMER.TXT\"", "E1");
+	if (exp == -12)
+		printExit("EXCEPTION OCCURED - FAILED TO OPEN \"MANAGER.TXT\"", "E2");
+	if (exp == -13)
+		printExit("EXCEPTION OCCURED - POSSIBLE DATA LOSS IN \"CUSTOMER\"", "E3");
+	if (exp == -14)
+		printExit("EXCEPTION OCCURED - POSSIBLE DATA LOSS IN \"MANAGET.TXT\"", "E4");
+}
+
 //file r/w functions
 
 //compute the number of entries inside a file
@@ -123,23 +135,27 @@ CUSTOMER* readF(FILE *buf, int *size, CUSTOMER *tag) {
 	//declare a dynamic allocated CUSTOMER struct array
 	storage = new CUSTOMER[*size];
 	for (int i = 0; i < *size; i++) {
+		static int check = 0;
 
 		//create struct pointer to replace customer[i] and customer[i].lastTrans
 		CUSTOMER *tmp = &storage[i];
 		TIME *tmp2 = &storage[i].lastTrans;
 
 		//obtain the customers' details and store into "cust"
-		fscanf(buf, "%[^|]|%[^|]|%[^\t]%*[^|]|%c|%[^\t]%*[^|]|%[^\t]%*[^|]|%[^|]|%d|%lf %d-%d-%d %d:%d:%d\n",
+		check = fscanf(buf, "%[^|]|%[^|]|%[^\t]%*[^|]|%c|%[^\t]%*[^|]|%[^\t]%*[^|]|%[^|]|%d|%lf %d-%d-%d %d:%d:%d\n",
 			tmp->accNo, tmp->PIN, tmp->name, &tmp->gender, tmp->adds, tmp->state, tmp->hp, &tmp->lock, &tmp->bal,
 			&tmp2->yr, &tmp2->mth, &tmp2->dy, &tmp2->hr, &tmp2->min, &tmp2->sec);
 		printf("%s\n%s\n%s\n%c\n%s\n%s\n%s\n%d\n%.2lf\n%d-%d-%d %d:%d:%d\n\n", 
 			tmp->accNo, tmp->PIN, tmp->name, tmp->gender, tmp->adds, tmp->state, tmp->hp, tmp->lock, tmp->bal,
 			tmp2->yr, tmp2->mth, tmp2->dy, tmp2->hr, tmp2->min, tmp2->sec);
+
+		//if there is possible lost data, return the error code
+		if (check != 15) throw - 13;
 	}
 	return storage;
 }
 
-//read manager.txt and store into a struct array
+//read manager.txt and store into a struct array : parameter -> tag is just to differentiate the overloaded functions which read different files
 MANAGER* readF(FILE *buf, int *size, MANAGER *tag) {
 	MANAGER *storage;
 
@@ -149,13 +165,22 @@ MANAGER* readF(FILE *buf, int *size, MANAGER *tag) {
 	//declare a dynamic allocated CUSTOMER struct array
 	storage = new MANAGER[*size];
 	for (int i = 0; i < *size; i++) {
+		static int check = 0;
 
 		//create struct pointer to replace mnger[i]
 		MANAGER *tmp = &storage[i];
 
 		//obtain the managers' details and store into "mnger"
-		fscanf(buf, "%[^|]|%[^\t]%*[^|]|%[^\n]\n", tmp->ID, tmp->passw, tmp->name);
+		check = fscanf(buf, "%[^|]|%[^\t]%*[^|]|%[^\n]\n", tmp->ID, tmp->passw, tmp->name);
 		//printf("%s\n%s\n%s\n\n", tmp->ID, tmp->passw, tmp->name);
+
+		//if there is possible lost data, return the error code
+		if (check != 3) throw - 14;
 	}
 	return storage;
+}
+
+//write and update customer.txt
+void writeF(FILE *buf, CUSTOMER *storage) {
+
 }

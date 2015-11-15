@@ -2,10 +2,10 @@
 
 #include "struct.h"
 
-//deposit function
+//deposit function--------------------------------------------------------
 
-//withdrawal function
+//withdrawal function--------------------------------------------------------
 
-//additional function
+//additional function--------------------------------------------------------
 
 

@@ -2,7 +2,6 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
-#include <conio.h>
 #include <Windows.h>
 
 #include "struct.h"
@@ -13,7 +12,7 @@ inline void discard_junk() {
 	while ((c = getchar()) != '\n'&&c != EOF);
 }
 
-//read any key from user
+//sustain the screen from being clear
 void readKey() {
 	printf("\n  PRESS ANY KEY TO CONTINUE...\n");
 	system("pause>nul");
@@ -95,6 +94,7 @@ int randomATM(int sel) {
 	return atm;
 }
 
+//used in exception section
 void printError(int exp) {
 	//runtime error
 	if (exp == -11)
@@ -107,7 +107,14 @@ void printError(int exp) {
 		printExit("EXCEPTION OCCURED - POSSIBLE DATA LOSS IN \"MANAGET.TXT\"", "E4");
 }
 
-//file r/w functions
+//read and set the password
+char* setPass(char* msg) {
+	printf("\n  ENTER YOUR NEW %s > ", msg);
+	char passw[18];
+
+}
+
+//file r/w functions--------------------------------------------------------
 
 //compute the number of entries inside a file
 int countEntry(FILE *buf) {
@@ -185,6 +192,8 @@ void writeF(FILE *buf, CUSTOMER *storage, int size) {
 	for (int i = 0; i < size; i++) {
 		CUSTOMER *tmp = &storage[i];
 		TIME *tmp2 = &storage[i].lastTrans;
+		if (tmp->lock < 3)
+			tmp->lock = 0;
 		fprintf(buf, "%5s|%5s|%-35s\t|%c|%-28s\t|%-13s\t|%s|%d|%08.2lf %02d-%02d-%04d %02d:%02d:%02d\n",
 			tmp->accNo, tmp->PIN, strcat(tmp->name, "_"), tmp->gender, strcat(tmp->adds, "_"), strcat(tmp->state, "_"), tmp->hp, tmp->lock, tmp->bal,
 			tmp2->dy, tmp2->mth, tmp2->yr, tmp2->hr, tmp2->min, tmp2->sec);

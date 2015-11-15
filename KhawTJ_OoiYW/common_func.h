@@ -93,6 +93,8 @@ int validIpt(int lLimit, int uLimit) {
 int randomATM(int sel) {
 	int atm = 0;
 	srand(time(NULL));
+
+	//generate random number : 1 to 5 for deposit / 6 to 10 for withdrawal
 	atm = rand() % 5 + ((sel == 1) ? 1 : 6);
 	return atm;
 }
@@ -122,20 +124,30 @@ char* setPass(char* msg, int limit) {
 		printf("\n  RE-ENTER NEW PASSWORD > ");
 		scanf("%[^\n]", passw2);
 		discard_junk();
+
+		//validation for pin. no.
 		if (limit == 5) {
 			for (int i = 0; i < 5; i++) {
+
+				//if pin. no. contains non-digit character
 				if (isdigit(passw[i]) == 0) {
 					printf("\n  PIN. NO. MUST CONTAIN ONLY DIGIT NUMBERS\n");
 					valid = false;
 					break;
 				}
 			}
+
+			//if pin. no. does not contain exactly 5 digit characters
 			if (passw[limit]!='\0') {
 				printf("\n  PIN. NO. MUST CONTAIN EXACTLY 5 DIGIT NUMBERS\n");
 				valid = false;
 			}
 		}
+
+		//validation of password
 		else {
+
+			//if the password entered contains more than 23 characters
 			for (int i = 0; i < 24; i++) {
 				if (passw[i] != '\0')
 					valid = false;
@@ -147,15 +159,21 @@ char* setPass(char* msg, int limit) {
 			if (valid == false)
 				printf("\n  NEW PASSWORD MUST CONTAIN ONLY AT MOST 23 CHARACTERS\n");
 		}
+
+		//if password and re-entred password do not match to each other
 		if (strcmp(passw, passw2) != 0) {
 			valid = false;
 			printf("\n  RE-ENTRED PASSWORD DOES NOT MATCH WITH THE PREVIOUS ONE\n");
 		}
+
+		//user is prompted to try again when the password/pin. no. is invalid
 		if (valid == false) {
 			printf("\n  PLEASE TRY AGAIN\n");
 			readKey();
 		}
 	} while (valid == false);
+
+	//otherwise returns the valid password
 	return passw2;
 }
 
@@ -164,8 +182,12 @@ char* setPass(char* msg, int limit) {
 //compute the number of entries inside a file
 int countEntry(FILE *buf) {
 	int count = 0;
+
+	//skip through every chars on a line until the pointer reach the '\n'
 	while (fscanf(buf, "%*[^\n]\n") != EOF)
 		count++;
+
+	//reset the pointer back to the beginning of the file
 	rewind(buf);
 	return count;
 }
@@ -235,10 +257,16 @@ MANAGER* readF(FILE *buf, int *size, MANAGER *tag) {
 //write and update customer.txt
 void writeF(FILE *buf, CUSTOMER *storage, int size) {
 	for (int i = 0; i < size; i++) {
+
+		//create temporary pointer for address of struct below
 		CUSTOMER *tmp = &storage[i];
 		TIME *tmp2 = &storage[i].lastTrans;
+
+		//if the attempt to log in is not above 3, reset it back to 0
 		if (tmp->lock < 3)
 			tmp->lock = 0;
+
+		//update the data into the destination file
 		fprintf(buf, "%5s|%5s|%-35s\t|%c|%-28s\t|%-13s\t|%s|%d|%08.2lf %02d-%02d-%04d %02d:%02d:%02d\n",
 			tmp->accNo, tmp->PIN, strcat(tmp->name, "_"), tmp->gender, strcat(tmp->adds, "_"), strcat(tmp->state, "_"), tmp->hp, tmp->lock, tmp->bal,
 			tmp2->dy, tmp2->mth, tmp2->yr, tmp2->hr, tmp2->min, tmp2->sec);

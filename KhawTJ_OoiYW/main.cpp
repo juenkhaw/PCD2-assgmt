@@ -109,8 +109,18 @@ int main() {
 						readKey();
 					}
 				} while (currCust->lock != 3);
+
 				if (strcmp(pinNo, "0") == 0)
 					continue;
+
+				//if this is the customer's first time to log in his new acc.
+				if (currCust->lastTrans.yr == 0) {
+					strcpy(currCust->PIN, setPass("WELCOME, THIS IS YOUR FIRST TIME TO LOG INTO YOUR BANK ACC.\n"
+						"  FOR SECURITY CONCERN, YOU ARE RECOMMENDED TO RESET YOUR PIN. NO.", 5, currCust->accNo));
+					currCust->lastTrans = setTime();
+					throw 1;
+				}
+
 				do { //customer menu loop starts
 					printHeader("MAIN MENU > CUSTOMER MENU", currCust->name, 0);
 					printf("\n\t1 -> DEPOSITS\n\t2 -> WITHDRAWALS/TRANSFERS\n");
@@ -282,8 +292,11 @@ int main() {
 
 	catch (int exception) { //once error or point of termination has triggered, the code below shall excecute immediately
 		//point to termination
-		if (exception == 0) {
+		if (exception == 0)
 			printExit("THANK YOU FOR CHOOSING US\n  HAVE A NICE DAY", "0");
+		if (exception == 1) {
+			printExit("YOUR PIN. NO. HAS RESET SUCCESFULLY", "S1");
+			printf("  PLEASE RESTART THE SYSTEM IN ORDER TO LOG INTO YOUR BANK ACC.\n\n\t  ACC. NO. : %s\n\n", accNo);
 		}
 		if (exception == -1) {
 			printExit("SORRY! YOU HAVE FAILED TO LOG INTO THE ACC. WITHIN 3 ATTEMPTS", "-1");

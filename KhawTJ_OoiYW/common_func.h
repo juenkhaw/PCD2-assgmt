@@ -33,6 +33,19 @@ void printTime(char c) {
 	printf("%04d-%02d-%02d %02d:%02d:%02d\n%c", t.wYear, t.wMonth, t.wDay, t.wHour, t.wMinute, t.wSecond, c);
 }
 
+TIME setTime() {
+	TIME buf;
+	SYSTEMTIME t;
+	GetLocalTime(&t);
+	buf.yr = t.wYear;
+	buf.mth = t.wMonth;
+	buf.dy = t.wDay;
+	buf.hr = t.wHour;
+	buf.min = t.wMinute;
+	buf.sec = t.wSecond;
+	return buf;
+}
+
 //print the header : leave name and atm empty if there is no deposit or withdrawal customer function
 void printHeader(char* dir, char *name, int atm) {
 	system("cls");
@@ -113,12 +126,12 @@ void printError(int exp) {
 }
 
 //read and set the password : set limit to 5 for pin. no. / 23 for passw
-char* setPass(char* msg, int limit) {
+char* setPass(char* msg, int limit, char *acc) {
 	char passw[24], passw2[24], valid;
 	do {
 		printHeader("RESET PASSWORD", "", 0);
 		valid = true;
-		printf("\n  %s\n  NEW PASSWORD > ", msg);
+		printf("\n  %s\n\n\t  ACC. NO. : %s\n\n  NEW PASSWORD > ", msg, acc);
 		scanf("%[^\n]", passw);
 		discard_junk();
 		printf("\n  RE-ENTER NEW PASSWORD > ");
@@ -218,7 +231,7 @@ CUSTOMER* readF(FILE *buf, int *size, CUSTOMER *tag) {
 		//obtain the customers' details and store into "cust"
 		check = fscanf(buf, "%[^|]|%[^|]|%[^_]%*[^|]|%c|%[^_]%*[^|]|%[^_]%*[^|]|%[^|]|%d|%lf %d-%d-%d %d:%d:%d\n",
 			tmp->accNo, tmp->PIN, tmp->name, &tmp->gender, tmp->adds, tmp->state, tmp->hp, &tmp->lock, &tmp->bal,
-			&tmp2->yr, &tmp2->mth, &tmp2->dy, &tmp2->hr, &tmp2->min, &tmp2->sec);
+			&tmp2->dy, &tmp2->mth, &tmp2->yr, &tmp2->hr, &tmp2->min, &tmp2->sec);
 		printf("%s\n%s\n%s\n%c\n%s\n%s\n%s\n%d\n%.2lf\n%d-%d-%d %d:%d:%d\n\n", 
 			tmp->accNo, tmp->PIN, tmp->name, tmp->gender, tmp->adds, tmp->state, tmp->hp, tmp->lock, tmp->bal,
 			tmp2->yr, tmp2->mth, tmp2->dy, tmp2->hr, tmp2->min, tmp2->sec);
@@ -267,7 +280,7 @@ void writeF(FILE *buf, CUSTOMER *storage, int size) {
 			tmp->lock = 0;
 
 		//update the data into the destination file
-		fprintf(buf, "%5s|%5s|%-35s\t|%c|%-28s\t|%-13s\t|%s|%d|%08.2lf %02d-%02d-%04d %02d:%02d:%02d\n",
+		fprintf(buf, "%5s|%5s|%-35s\t|%c|%-28s\t|%-13s\t|%s|%d|%09.2lf %02d-%02d-%04d %02d:%02d:%02d\n",
 			tmp->accNo, tmp->PIN, strcat(tmp->name, "_"), tmp->gender, strcat(tmp->adds, "_"), strcat(tmp->state, "_"), tmp->hp, tmp->lock, tmp->bal,
 			tmp2->dy, tmp2->mth, tmp2->yr, tmp2->hr, tmp2->min, tmp2->sec);
 	}

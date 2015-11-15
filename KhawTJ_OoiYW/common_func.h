@@ -2,6 +2,7 @@
 #include <stdlib.h>
 #include <time.h>
 #include <string.h>
+#include <ctype.h>
 #include <Windows.h>
 
 #include "struct.h"
@@ -33,12 +34,14 @@ void printTime(char c) {
 }
 
 //print the header : leave name and atm empty if there is no deposit or withdrawal customer function
-void printHeader(char* dir, char* name, int atm) {
+void printHeader(char* dir, char *name, int atm) {
 	system("cls");
 	printf("\n  BANKING SYSTEM    ");
 	(atm != 0) ? printf("ATM %02d     ", atm) : printf("ATM n/a    ");
 	printTime('\n');
-	printf("  WELCOME %s\n\n  %s\n\n", name, dir);
+	printf("  %s\n\n", dir);
+	if (strcmp(name, "") != 0)
+		printf("  WELCOME - %s\n\n", name);
 }
 
 //print exit screen : exp is to determine exit code
@@ -94,7 +97,7 @@ int randomATM(int sel) {
 	return atm;
 }
 
-//used in exception section
+//used in exception section only
 void printError(int exp) {
 	//runtime error
 	if (exp == -11)
@@ -107,11 +110,53 @@ void printError(int exp) {
 		printExit("EXCEPTION OCCURED - POSSIBLE DATA LOSS IN \"MANAGET.TXT\"", "E4");
 }
 
-//read and set the password
-char* setPass(char* msg) {
-	printf("\n  ENTER YOUR NEW %s > ", msg);
-	char passw[18];
-
+//read and set the password : set limit to 5 for pin. no. / 23 for passw
+char* setPass(char* msg, int limit) {
+	char passw[24], passw2[24], valid;
+	do {
+		printHeader("RESET PASSWORD", "", 0);
+		valid = true;
+		printf("\n  %s\n  NEW PASSWORD > ", msg);
+		scanf("%[^\n]", passw);
+		discard_junk();
+		printf("\n  RE-ENTER NEW PASSWORD > ");
+		scanf("%[^\n]", passw2);
+		discard_junk();
+		if (limit == 5) {
+			for (int i = 0; i < 5; i++) {
+				if (isdigit(passw[i]) == 0) {
+					printf("\n  PIN. NO. MUST CONTAIN ONLY DIGIT NUMBERS\n");
+					valid = false;
+					break;
+				}
+			}
+			if (passw[limit]!='\0') {
+				printf("\n  PIN. NO. MUST CONTAIN EXACTLY 5 DIGIT NUMBERS\n");
+				valid = false;
+			}
+		}
+		else {
+			for (int i = 0; i < 24; i++) {
+				if (passw[i] != '\0')
+					valid = false;
+				else {
+					valid = true;
+					break;
+				}
+			}
+			if (valid == false)
+				printf("\n  NEW PASSWORD MUST CONTAIN ONLY AT MOST 23 CHARACTERS\n");
+		}
+		if (strcmp(passw, passw2) != 0) {
+			valid = false;
+			printf("\n  RE-ENTRED PASSWORD DOES NOT MATCH WITH THE PREVIOUS ONE\n");
+		}
+		if (valid == false) {
+			printf("\n  PLEASE TRY AGAIN\n");
+			readKey();
+		}
+	} while (valid == false);
+	return passw2;
 }
 
 //file r/w functions--------------------------------------------------------

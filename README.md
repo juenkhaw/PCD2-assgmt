@@ -5,8 +5,8 @@
 - <s>Interactive main menu</s>
 
 <h3><strong>Log-in Function</strong></h3>
-- <s>Lock the account once user have been key in wrong password for 3 times.</s>
-- Reset the password for the new account that is logged in for the first time
+- <s>Lock the account once user have been key in wrong password for 3 times</s>
+- <s>Reset the password for the new account that is logged in for the first time</s>
 
 <h3><strong>Customer Functions</strong></h3>
 

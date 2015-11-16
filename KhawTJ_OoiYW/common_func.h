@@ -49,20 +49,23 @@ TIME setTime() {
 //print the header : leave name and atm empty if there is no deposit or withdrawal customer function
 void printHeader(char* dir, char *name, int atm) {
 	system("cls");
-	printf("\n  BANKING SYSTEM    ");
+	printf("\n  TARBANK BANKING SYSTEM    ");
 	(atm != 0) ? printf("ATM %02d     ", atm) : printf("ATM n/a    ");
 	printTime('\n');
-	printf("  %s\n\n", dir);
 	if (strcmp(name, "") != 0)
-		printf("  WELCOME - %s\n\n", name);
+		printf("  WELCOME - %s\n", name);
+	printf("\n  %s\n", dir);
+	for (int i = 0; i < 75; i++) printf("-");
+	printf("\n");
 }
 
 //print exit screen : exp is to determine exit code
 void printExit(char* msg, char* exp) {
 	system("cls");
-	printf("\n  BANKING SYSTEM    ATM n/a    ");
+	printf("\n  TARBANK BANKING SYSTEM    ATM n/a    ");
 	printTime('\n');
 	printf("  EXIT CODE : %s\n\n  %s\n\n", exp, msg);
+	for (int i = 0; i < 78; i++) printf("-");
 }
 
 // print the fixed menu
@@ -82,6 +85,7 @@ char validIpt(char* msg) {
 		(check != 1) ? discard_junk() : 0;
 	} while ((toupper(sel) != 'N'&&toupper(sel) != 'Y' || check != 1) && printf("\n  INVALID INPUT DETECTED\n  Please try again > "));
 
+	discard_junk();
 	//return the validated char input
 	return toupper(sel);
 }
@@ -98,7 +102,22 @@ int validIpt(int lLimit, int uLimit) {
 		(check != 2 || c != '\n') ? discard_junk() : 0;
 	} while ((check != 2 || c != '\n' || ipt < lLimit || ipt > uLimit) && printf("\n  INVALID INPUT DETECTED\n  Please try again > "));
 
-	//return the validated int input
+	//return the valid int input
+	return ipt;
+}
+
+double validIpt() {
+	double ipt;
+	int check;
+	char c;
+	do {
+		check = scanf("%lf%c", &ipt, &c);
+
+		//remove the junk inside the input buffer
+		(check != 2 || c != '\n') ? discard_junk() : 0;
+	} while ((check != 2 || c != '\n')&&printf("\n  INVALID INPUT DETECTED\n  Please try again > "));
+
+	//return the valid double input
 	return ipt;
 }
 
@@ -232,9 +251,9 @@ CUSTOMER* readF(FILE *buf, int *size, CUSTOMER *tag) {
 		check = fscanf(buf, "%[^|]|%[^|]|%[^_]%*[^|]|%c|%[^_]%*[^|]|%[^_]%*[^|]|%[^|]|%d|%lf %d-%d-%d %d:%d:%d\n",
 			tmp->accNo, tmp->PIN, tmp->name, &tmp->gender, tmp->adds, tmp->state, tmp->hp, &tmp->lock, &tmp->bal,
 			&tmp2->dy, &tmp2->mth, &tmp2->yr, &tmp2->hr, &tmp2->min, &tmp2->sec);
-		printf("%s\n%s\n%s\n%c\n%s\n%s\n%s\n%d\n%.2lf\n%d-%d-%d %d:%d:%d\n\n", 
-			tmp->accNo, tmp->PIN, tmp->name, tmp->gender, tmp->adds, tmp->state, tmp->hp, tmp->lock, tmp->bal,
-			tmp2->yr, tmp2->mth, tmp2->dy, tmp2->hr, tmp2->min, tmp2->sec);
+		//printf("%s\n%s\n%s\n%c\n%s\n%s\n%s\n%d\n%.2lf\n%d-%d-%d %d:%d:%d\n\n", 
+		//	tmp->accNo, tmp->PIN, tmp->name, tmp->gender, tmp->adds, tmp->state, tmp->hp, tmp->lock, tmp->bal,
+		//	tmp2->yr, tmp2->mth, tmp2->dy, tmp2->hr, tmp2->min, tmp2->sec);
 
 		//if there is possible lost data, return the error code
 		if (check != 15) throw - 13;

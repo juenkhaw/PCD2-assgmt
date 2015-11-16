@@ -10,7 +10,7 @@
 int main() {
 	printf("\n\tINITIALIZING...\n");
 
-	//normal variables
+	//core variables
 	int custCount = 0, mngerCount = 0;
 	int nSel = 0, nATM = 0;
 	char chSel = 'N';
@@ -20,7 +20,7 @@ int main() {
 	CUSTOMER *currCust;
 	MANAGER *currMnger;
 
-	//file pointers
+	//core file pointers
 	FILE *custINF;
 	FILE *mngerINF;
 	FILE *test = fopen("test.txt", "w+");
@@ -28,6 +28,8 @@ int main() {
 	//variables for deposits
 
 	//variables for withdrawals
+	FILE *wdOUTF = fopen("Withdrawals.dat", "a+");
+	FILE *transOUTF = fopen("Transfers.dat", "a+");
 
 	try { //start to seek for the runtime error and point to terminate the system
 
@@ -57,7 +59,7 @@ int main() {
 				//reset the current customer pointer to null : currCust ptr is point to the customer who has logged in to his acc.
 				currCust = nullptr;
 				printHeader("LOG-IN : CUSTOMER", "", 0);
-				printf("\t0 -> BACK\n\n    PLEASE ENTER YOUR ACC. NO. > ");
+				printf("\n\t0 -> BACK\n\n    PLEASE ENTER YOUR ACC. NO. > ");
 				scanf("%[^\n]", accNo);
 				discard_junk();
 
@@ -77,8 +79,8 @@ int main() {
 
 				//if the acc. no. entered by user is not found, system shall prompt user for entering again
 				if (currCust == nullptr) {
-					printHeader("ERROR", "", 0);
-					printf("  THE ACC. NO. YOU HAVE ENTERED HAS NOT FOUND/INVALID\n\n  ACC. NO. : %s\n\n  PLEASE TRY AGAIN\n", accNo);
+					printHeader("ERROR - ACC. NOT FOUND", "", 0);
+					printf("  THE ACC. NO. YOU HAD ENTERED HAS NOT FOUND/INVALID\n\n  ACC. NO. : %s\n\n  PLEASE TRY AGAIN\n", accNo);
 					readKey();
 					continue;
 				}
@@ -86,7 +88,7 @@ int main() {
 				//if the acc. no. is valid, user is prompted for entering password within only 3 attempts
 				do {
 					printHeader("LOG-IN : CUSTOMER", "", 0);
-					printf("\t0 -> BACK\n\n    PLEASE ENTER PIN. NO. FOR ACC. %s > ", accNo);
+					printf("\n\t0 -> BACK\n\n    PLEASE ENTER PIN. NO. FOR ACC. %s > ", accNo);
 					scanf("%[^\n]", pinNo);
 					discard_junk();
 
@@ -158,7 +160,10 @@ int main() {
 							nSel = validIpt(-1, 2);
 							switch (nSel) {
 							case 1: //cash withdrawal
+								//wdFunc(wdOUTF, currCust, nATM);
+								continue;
 							case 2: //cash/funds transfer
+								//transFunc(transOUTF, currCust, cust, custCount, nATM);
 								continue;
 							case 0: //back
 								break;
@@ -185,8 +190,8 @@ int main() {
 				//manager log-in function
 				//reset the current manager pointer to null : currMnger is a ptr that pointed to the manager who has logged in
 				currMnger = nullptr;
-				printHeader("LOG-IN : MANAGER", "", 0);
-				printf("\t0 -> BACK\n\n    PLEASE ENTER YOUR ID. NO. > ");
+				printHeader("LOG-IN : MANAGER/STAFF", "", 0);
+				printf("\n\t0 -> BACK\n\n    PLEASE ENTER YOUR ID. NO. > ");
 				scanf("%[^\n]", accNo);
 				discard_junk();
 
@@ -203,8 +208,8 @@ int main() {
 
 				//if ID. no. is invalid, user is prompted to enter again
 				if (currMnger == nullptr) {
-					printHeader("ERROR", "", 0);
-					printf("  THE ID. NO. YOU HAVE ENTERED HAS NOT FOUND/INVALID\n\n  ID. NO. : %s\n\n  PLEASE TRY AGAIN\n", accNo);
+					printHeader("ERROR - MANAGER/STAFF ENTRY NOT FOUND", "", 0);
+					printf("  THE ID. NO. YOU HAD ENTERED HAS NOT FOUND/INVALID\n\n  ID. NO. : %s\n\n  PLEASE TRY AGAIN\n", accNo);
 					readKey();
 					continue;
 				}
@@ -224,14 +229,14 @@ int main() {
 				if (strcmp(pinNo, "0") == 0)
 					continue;
 				do { //manager menu loop starts
-					printHeader("MAIN MENU > MANAGER MENU", "", 0);
+					printHeader("MAIN MENU > MANAGER MENU", currMnger->name, 0);
 					printf("\n\t1 -> PRINT TRANSACTION LOGS\n\t2 -> PERFORM UPDATES\n");
 					printBreak();
 					nSel = validIpt(-1, 2);
 					switch (nSel) {
 					case 1: //trans logs subsystem
 						do { //trans logs loop starts
-							printHeader("MAIN MENU > MANAGER MENU > PRINT TRANSACTION LOGS", "", 0);
+							printHeader("MAIN MENU > MANAGER MENU > PRINT TRANSACTION LOGS", currMnger->name, 0);
 							printf("\n\t1 -> CASH DEPOSIT LOG\n\t2 -> CHEQUE DEPOSIT LOG\n\t3 -> WITHDRAWAL LOG\n\t4 -> FUNDS TRANSFER LOG\n");
 							printBreak();
 							nSel = validIpt(-1, 4);
@@ -253,7 +258,7 @@ int main() {
 						continue;
 					case 2: //perform updates subsystem
 						do {
-							printHeader("MAIN MENU > MANAGER MENU > PERFORM UPDATES", "", 0);
+							printHeader("MAIN MENU > MANAGER MENU > PERFORM UPDATES", currMnger->name, 0);
 							printf("\n\t1 -> CHEQUE CLEARING\n\t2 -> HIGH WITHDRAWALS ALERT\n");
 							printBreak();
 							nSel = validIpt(-1, 2);
@@ -321,6 +326,8 @@ int main() {
 	//close the files
 	fclose(custINF);
 	fclose(mngerINF);
+	fclose(wdOUTF);
+	fclose(transOUTF);
 	fclose(test);
 	
 	return 0;

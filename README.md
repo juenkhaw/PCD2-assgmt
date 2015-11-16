@@ -29,7 +29,7 @@ BASIC
 
 - Cash deposit log
 - Cheque deposit log
-- Withdrawal log
+- <s>Withdrawal log</s>
 - Funds transfer log
 - Cheque clearing
 - High withdrawals alert

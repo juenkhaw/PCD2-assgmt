@@ -15,7 +15,7 @@ BASIC
 
 - Cash deposit
 - Cheque deposit
-- Withdrawal
+- <s>Withdrawal</s>
 - Funds transfer
 
 ADDITIONAL

@@ -1,4 +1,5 @@
 # PCD2-assgmt
+THERE WILL BE <strong>NO UPDATE</strong> FOR DEPOSIT/WITHDRAWAL FUNCTIONS
 <h1>TO-DO LIST</h1>
 
 <h3><strong>Main Menu</strong></h3>
@@ -28,7 +29,7 @@ BASIC
 
 - Cash deposit log
 - Cheque deposit log
-- Withdrawal log
+- <s>Withdrawal log</s>
 - Funds transfer log
 - Cheque clearing
 - High withdrawals alert

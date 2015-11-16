@@ -31,7 +31,7 @@ int main() {
 	FILE *wdOUTF = fopen("Withdrawals.dat", "a+");
 	FILE *transOUTF = fopen("Transfers.dat", "a+");
 
-	//printWdLog(wdOUTF);
+	printTransLog(transOUTF);
 
 	try { //start to seek for the runtime error and point to terminate the system
 

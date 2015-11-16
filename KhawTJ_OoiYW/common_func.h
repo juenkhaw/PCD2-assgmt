@@ -143,6 +143,8 @@ void printError(int exp) {
 		printExit("EXCEPTION OCCURED - POSSIBLE DATA LOSS IN \"MANAGET.TXT\"", "E4");
 	if (exp == -15)
 		printExit("EXCEPTION OCCURED - POSSIBLE DATA LOSS IN \"WITHDRAWALS.DAT\"", "E5");
+	if (exp == -16)
+		printExit("EXCEPTION OCCURED - POSSIBLE DATA LOSS IN \"TRANSFERS.DAT\"", "E6");
 }
 
 //read and set the password : set limit to 5 for pin. no. / 23 for passw

@@ -10,12 +10,13 @@ typedef struct {
 
 typedef struct {
 	TIME t;
-	int ATM, accNo, txnCode;
+	char accNo[6];
+	int ATM, txnCode;
 	double amt, prevBal, newBal;
 }BASEINFO;
 
 typedef struct {
-	char accNo[7], PIN[7];
+	char accNo[6], PIN[6];
 	char name[36], gender, adds[29], state[14], hp[12];
 	int lock;
 	double bal;

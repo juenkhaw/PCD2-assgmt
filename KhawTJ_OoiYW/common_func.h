@@ -1,9 +1,6 @@
-#include <stdio.h>
-#include <stdlib.h>
 #include <time.h>
 #include <string.h>
 #include <ctype.h>
-#include <Windows.h>
 
 #include "struct.h"
 
@@ -65,8 +62,9 @@ void printExit(char* msg, char* exp) {
 	system("cls");
 	printf("\n  TARBANK BANKING SYSTEM    ATM n/a    ");
 	printTime('\n');
-	printf("  EXIT CODE : %s\n\n  %s\n\n", exp, msg);
+	printf("  EXIT CODE : %s\n\n  %s\n", exp, msg);
 	for (int i = 0; i < 78; i++) printf("-");
+	printf("\n");
 }
 
 // print the fixed menu
@@ -95,7 +93,6 @@ char validIpt(char* msg) {
 int validIpt(int lLimit, int uLimit) {
 	int ipt, check;
 	char c;
-	printf("\n  Your choice > ");
 	do {
 		check = scanf("%d%c", &ipt, &c);
 
@@ -144,15 +141,17 @@ void printError(int exp) {
 		printExit("EXCEPTION OCCURED - POSSIBLE DATA LOSS IN \"CUSTOMER\"", "E3");
 	if (exp == -14)
 		printExit("EXCEPTION OCCURED - POSSIBLE DATA LOSS IN \"MANAGET.TXT\"", "E4");
+	if (exp == -15)
+		printExit("EXCEPTION OCCURED - POSSIBLE DATA LOSS IN \"WITHDRAWALS.DAT\"", "E5");
 }
 
 //read and set the password : set limit to 5 for pin. no. / 23 for passw
-char* setPass(char* msg, int limit, char *acc) {
+char* setPass(char* msg, int limit, CUSTOMER *cust) {
 	char passw[24], passw2[24], valid;
 	do {
-		printHeader("RESET PASSWORD", "", 0);
+		printHeader("RESET PASSWORD", cust->name, 0);
 		valid = true;
-		printf("\n  %s\n\n\t  ACC. NO. : %s\n\n  NEW PASSWORD > ", msg, acc);
+		printf("\n  %s\n\n\t  ACC. NO. : %s\n\n  NEW PASSWORD > ", msg, cust->accNo);
 		scanf("%[^\n]", passw);
 		discard_junk();
 		printf("\n  RE-ENTER NEW PASSWORD > ");
@@ -197,7 +196,7 @@ char* setPass(char* msg, int limit, char *acc) {
 		//if password and re-entred password do not match to each other
 		if (strcmp(passw, passw2) != 0) {
 			valid = false;
-			printf("\n  RE-ENTRED PASSWORD DOES NOT MATCH WITH THE PREVIOUS ONE\n");
+			printf("\n  RE-ENTRED PASSWORD DID NOT MATCH WITH THE PREVIOUS ONE\n");
 		}
 
 		//user is prompted to try again when the password/pin. no. is invalid

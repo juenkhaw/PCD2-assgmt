@@ -15,7 +15,7 @@ BASIC
 - Cash deposit
 - Cheque deposit
 - <s>Withdrawal</s>
-- Funds transfer
+- <s>Funds transfer</s>
 
 ADDITIONAL
 - Change password
@@ -34,7 +34,7 @@ BASIC
 - High withdrawals alert
 
 ADDITIONAL
-- Unlock the locked account
+- <s>Unlock the locked account</s>
 - Register for customer/manager
 - Change passw
 - Flow of funds of the customers (all of the transactions etc.)

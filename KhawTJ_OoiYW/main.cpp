@@ -160,10 +160,10 @@ int main() {
 							nSel = validIpt(-1, 2);
 							switch (nSel) {
 							case 1: //cash withdrawal
-								//wdFunc(wdOUTF, currCust, nATM);
+								wdFunc(wdOUTF, currCust, nATM);
 								continue;
 							case 2: //cash/funds transfer
-								//transFunc(transOUTF, currCust, cust, custCount, nATM);
+								transFunc(transOUTF, currCust, cust, custCount, nATM);
 								continue;
 							case 0: //back
 								break;

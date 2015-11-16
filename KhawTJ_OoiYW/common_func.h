@@ -33,6 +33,7 @@ void printTime(char c) {
 	printf("%04d-%02d-%02d %02d:%02d:%02d\n%c", t.wYear, t.wMonth, t.wDay, t.wHour, t.wMinute, t.wSecond, c);
 }
 
+//set the system time into time struct (memory)
 TIME setTime() {
 	TIME buf;
 	SYSTEMTIME t;
@@ -106,6 +107,7 @@ int validIpt(int lLimit, int uLimit) {
 	return ipt;
 }
 
+//accept, validate and return double input
 double validIpt() {
 	double ipt;
 	int check;

@@ -24,10 +24,10 @@ void reset(char *chSel, int *nSel, int *nATM) {
 }
 
 //print the time on a console with a fixed format : c can only be ' ' or '\n'
-void printTime(char c) {
+void printTime() {
 	SYSTEMTIME t;
 	GetLocalTime(&t);
-	printf("%04d-%02d-%02d %02d:%02d:%02d\n%c", t.wYear, t.wMonth, t.wDay, t.wHour, t.wMinute, t.wSecond, c);
+	printf("%04d-%02d-%02d %02d:%02d:%02d\n", t.wYear, t.wMonth, t.wDay, t.wHour, t.wMinute, t.wSecond);
 }
 
 //set the system time into time struct (memory)
@@ -49,11 +49,11 @@ void printHeader(char* dir, char *name, int atm) {
 	system("cls");
 	printf("\n  TARBANK BANKING SYSTEM    ");
 	(atm != 0) ? printf("ATM %02d     ", atm) : printf("ATM n/a    ");
-	printTime('\n');
+	printTime();
 	if (strcmp(name, "") != 0)
-		printf("  WELCOME - %s\n", name);
-	printf("\n  %s\n", dir);
-	for (int i = 0; i < 75; i++) printf("-");
+		printf("  WELCOME, %s\n", name);
+	printf("  %s\n", dir);
+	for (int i = 0; i < 79; i++) printf("=");
 	printf("\n");
 }
 
@@ -61,9 +61,9 @@ void printHeader(char* dir, char *name, int atm) {
 void printExit(char* msg, char* exp) {
 	system("cls");
 	printf("\n  TARBANK BANKING SYSTEM    ATM n/a    ");
-	printTime('\n');
+	printTime();
 	printf("  EXIT CODE : %s\n\n  %s\n", exp, msg);
-	for (int i = 0; i < 78; i++) printf("-");
+	for (int i = 0; i < 78; i++) printf("=");
 	printf("\n");
 }
 
@@ -78,11 +78,12 @@ char validIpt(char* msg) {
 	int check;
 	printf("\n  %s (Y = Yes, N = No) > ", msg);
 	do {
+		sel = c[0] = '\0';
 		check = scanf(" %c%1[^\n]", &sel, c);
 
 		//remove the junk inside the input buffer
 		(check != 1) ? discard_junk() : 0;
-	} while ((toupper(sel) != 'N'&&toupper(sel) != 'Y' || check != 1) && printf("\n  INVALID INPUT DETECTED\n  Please try again > "));
+	} while ((toupper(sel) != 'N'&&toupper(sel) != 'Y' || check != 1) && printf("\n  INVALID INPUT DETECTED\n  PLEASE TRY AGAIN > "));
 
 	discard_junk();
 	//return the validated char input
@@ -94,11 +95,12 @@ int validIpt(int lLimit, int uLimit) {
 	int ipt, check;
 	char c;
 	do {
+		c = '\0';
 		check = scanf("%d%c", &ipt, &c);
 
 		//remove the junk inside the input buffer
 		(check != 2 || c != '\n') ? discard_junk() : 0;
-	} while ((check != 2 || c != '\n' || ipt < lLimit || ipt > uLimit) && printf("\n  INVALID INPUT DETECTED\n  Please try again > "));
+	} while ((check != 2 || c != '\n' || ipt < lLimit || ipt > uLimit) && printf("\n  INVALID INPUT DETECTED\n  PLEASE TRY AGAIN > "));
 
 	//return the valid int input
 	return ipt;
@@ -110,11 +112,12 @@ double validIpt() {
 	int check;
 	char c;
 	do {
+		c = '\0';
 		check = scanf("%lf%c", &ipt, &c);
 
 		//remove the junk inside the input buffer
 		(check != 2 || c != '\n') ? discard_junk() : 0;
-	} while ((check != 2 || c != '\n')&&printf("\n  INVALID INPUT DETECTED\n  Please try again > "));
+	} while ((check != 2 || c != '\n')&&printf("\n  INVALID INPUT DETECTED\n  PLEASE TRY AGAIN > "));
 
 	//return the valid double input
 	return ipt;
@@ -151,8 +154,10 @@ void printError(int exp) {
 char* setPass(char* msg, int limit, CUSTOMER *cust) {
 	char passw[24], passw2[24], valid;
 	do {
-		printHeader("RESET PASSWORD", cust->name, 0);
+		passw[0] = passw2[0] = '\0';
 		valid = true;
+		printHeader("RESET PASSWORD", "",  0);
+		//prompt user to enter and re-enter new password
 		printf("\n  %s\n\n\t  ACC. NO. : %s\n\n  NEW PASSWORD > ", msg, cust->accNo);
 		scanf("%[^\n]", passw);
 		discard_junk();
@@ -236,6 +241,7 @@ void printTime(FILE *buf) {
 
 //read customer.txt and store into a struct array : parameter -> tag is just to differentiate the overloaded functions which read different files
 CUSTOMER* readF(FILE *buf, int *size, CUSTOMER *tag) {
+	int check;
 	CUSTOMER *storage;
 
 	//compute the number of customers inside the "Customer.txt"
@@ -244,7 +250,7 @@ CUSTOMER* readF(FILE *buf, int *size, CUSTOMER *tag) {
 	//declare a dynamic allocated CUSTOMER struct array
 	storage = new CUSTOMER[*size];
 	for (int i = 0; i < *size; i++) {
-		static int check = 0;
+		check = 0;
 
 		//create struct pointer to replace customer[i] and customer[i].lastTrans
 		CUSTOMER *tmp = &storage[i];
@@ -266,6 +272,7 @@ CUSTOMER* readF(FILE *buf, int *size, CUSTOMER *tag) {
 
 //read manager.txt and store into a struct array : parameter -> tag is just to differentiate the overloaded functions which read different files
 MANAGER* readF(FILE *buf, int *size, MANAGER *tag) {
+	int check;
 	MANAGER *storage;
 
 	//compute the number of customers inside the "Customer.txt"
@@ -274,7 +281,7 @@ MANAGER* readF(FILE *buf, int *size, MANAGER *tag) {
 	//declare a dynamic allocated CUSTOMER struct array
 	storage = new MANAGER[*size];
 	for (int i = 0; i < *size; i++) {
-		static int check = 0;
+		check = 0;
 
 		//create struct pointer to replace mnger[i]
 		MANAGER *tmp = &storage[i];
@@ -291,6 +298,7 @@ MANAGER* readF(FILE *buf, int *size, MANAGER *tag) {
 
 //write and update customer.txt
 void writeF(FILE *buf, CUSTOMER *storage, int size) {
+	rewind(buf);
 	for (int i = 0; i < size; i++) {
 
 		//create temporary pointer for address of struct below

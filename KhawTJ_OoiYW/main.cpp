@@ -31,8 +31,6 @@ int main() {
 	FILE *wdOUTF = fopen("Withdrawals.dat", "a+");
 	FILE *transOUTF = fopen("Transfers.dat", "a+");
 
-	printTransLog(transOUTF);
-
 	try { //start to seek for the runtime error and point to terminate the system
 
 		//check whether the files have opened or not
@@ -51,12 +49,11 @@ int main() {
 		//main processing loop
 		do { //main menu loop starts
 			printHeader("MAIN MENU", "", 0);
-			printBreak();
-			printf("\n\t1 -> CUSTOMER MENU\n\t2 -> MANAGER MENU\n\n\t  SELECT > ");
-			nSel = validIpt(-1, 2);
+			printf("\n\t0 -> QUIT\n\n\n\t1 -> CUSTOMER MENU\n\t2 -> MANAGER MENU\n\n\t  SELECT > ");
+			nSel = validIpt(0, 2);
 			switch (nSel) {
 			case 1: //customer menu
-
+				accNo[0] = pinNo[0] = '\0';
 				//customer log-in function
 				//reset the current customer pointer to null : currCust ptr is point to the customer who has logged in to his acc.
 				currCust = nullptr;
@@ -82,10 +79,13 @@ int main() {
 				//if the acc. no. entered by user is not found, system shall prompt user for entering again
 				if (currCust == nullptr) {
 					printHeader("ERROR - ACC. NOT FOUND", "", 0);
-					printf("  THE ACC. NO. YOU HAD ENTERED WAS NOT FOUND/INVALID\n\n  ACC. NO. : %s\n\n  PLEASE TRY AGAIN\n", accNo);
+					printf("\n  THE ACC. NO. YOU HAD ENTERED WAS NOT FOUND/INVALID\n\n  ACC. NO. : %s\n\n  PLEASE TRY AGAIN\n", accNo);
 					readKey();
 					continue;
 				}
+
+				//if the acc was locked, terminate the system
+				if (currCust->lock == 3) throw - 2;
 
 				//if the acc. no. is valid, user is prompted for entering password within only 3 attempts
 				do {
@@ -114,6 +114,7 @@ int main() {
 					}
 				} while (currCust->lock != 3);
 
+				//0 -> back
 				if (strcmp(pinNo, "0") == 0)
 					continue;
 
@@ -188,7 +189,7 @@ int main() {
 				reset(&chSel, &nSel, &nATM);
 				continue;
 			case 2: //manager menu
-
+				accNo[0] = pinNo[0] = '\0';
 				//manager log-in function
 				//reset the current manager pointer to null : currMnger is a ptr that pointed to the manager who has logged in
 				currMnger = nullptr;
@@ -211,14 +212,14 @@ int main() {
 				//if ID. no. is invalid, user is prompted to enter again
 				if (currMnger == nullptr) {
 					printHeader("ERROR - MANAGER/STAFF ENTRY NOT FOUND", "", 0);
-					printf("  THE ID. NO. YOU HAD ENTERED WAS NOT FOUND/INVALID\n\n  ID. NO. : %s\n\n  PLEASE TRY AGAIN\n", accNo);
+					printf("\n  THE ID. NO. YOU HAD ENTERED WAS NOT FOUND/INVALID\n\n  ID. NO. : %s\n\n  PLEASE TRY AGAIN\n", accNo);
 					readKey();
 					continue;
 				}
 
 				//if the ID. no. is valid, user is required to enter password.
 				do {
-					printf("    PLEASE ENTER PASSW. > ");
+					printf("  PLEASE ENTER PASSW. > ");
 					scanf("%[^\n]", pinNo);
 					discard_junk();
 					if (strcmp(pinNo, "0") == 0)
@@ -228,6 +229,7 @@ int main() {
 					if (strcmp(pinNo, currMnger->passw) == 0)
 						break;
 				} while (printf("\n  INVALID PASSWORD - PLEASE TRY AGAIN\n"));
+				//0 -> back
 				if (strcmp(pinNo, "0") == 0)
 					continue;
 				do { //manager menu loop starts
@@ -250,6 +252,7 @@ int main() {
 								printWdLog(wdOUTF);
 								continue;
 							case 4: //funds transfer log
+								printTransLog(transOUTF);
 								continue;
 							case 0: //back
 								break;
@@ -330,9 +333,13 @@ int main() {
 			printf("\n  PLEASE RESTART THE SYSTEM IN ORDER TO LOG INTO YOUR BANK ACC.\n\n\t  ACC. NO. : %s\n\n", accNo);
 		}
 		if (exception == -1) {
-			printExit("SORRY! YOU HAVE FAILED TO LOG INTO THE ACC. WITHIN 3 ATTEMPTS", "-1");
+			printExit("SORRY, YOU HAVE FAILED TO LOG INTO THE ACC. WITHIN 3 ATTEMPTS", "-1");
 			printf("\n  THE ACC. BELOW HAS BEEN LOCKED DUE TO SECURITY CONCERN\n\n\t  ACC. NO. : %s\n\n"
 				"  PLEASE CONTACT A QUALIFIED MANAGER/STAFF IN ORDER TO UNLOCK THE ACC. ABOVE\n\n", accNo);
+		}
+		if (exception == -2) {
+			printExit("YOUR ACC. IS LOCKED DUE TO SECURITY CONCERN", "-2");
+			printf("\n  PLEASE CONTACT A QUALIFIED MANAGER/STAFF IN ORDER TO UNLOCK YOUR ACC.\n\n\t  <SYSTEM TERMINATED>\n");
 		}
 		//runtime error
 		printError(exception);
@@ -342,6 +349,7 @@ int main() {
 	}
 
 	writeF(test, cust, custCount);
+	//writeF(custINF, cust, custCount);
 
 	printf("\t\t<SYSTEM TERMINATED>\n\n");
 

@@ -62,27 +62,8 @@ int main() {
 				scanf("%[^\n]", accNo);
 				discard_junk();
 
-				//the system will jump back to main menu if user key in "0"
-				if (strcmp(accNo, "0") == 0)
-					continue;
-
-				//check for the existance of the acc. no. entered by user
-				for (int i = 0; i < custCount; i++) {
-					if (strcmp(accNo, cust[i].accNo) == 0) {
-
-						//if the acc. no. entered by user does exist, the currCust ptr shall point to his acc.
-						currCust = &cust[i];
-						break;
-					}
-				}
-
-				//if the acc. no. entered by user is not found, system shall prompt user for entering again
-				if (currCust == nullptr) {
-					printHeader("ERROR - ACC. NOT FOUND", "", 0);
-					printf("\n  THE ACC. NO. YOU HAD ENTERED WAS NOT FOUND/INVALID\n\n  ACC. NO. : %s\n\n  PLEASE TRY AGAIN\n", accNo);
-					readKey();
-					continue;
-				}
+				currCust = findAcc(cust, accNo, custCount);
+				if (currCust == nullptr) continue;
 
 				//if the acc was locked, terminate the system
 				if (currCust->lock == 3) throw - 2;
@@ -108,7 +89,7 @@ int main() {
 						//if the user has been failed to log into the acc. for 3 times, the system shall lock the acc and terminate
 						if (currCust->lock == 3)
 							throw - 1;
-						printf("\n  INVALID PASSWORD\n  WARNING - YOU HAVE ONLY 3 ATTEMPTS TO LOG INTO YOUR ACC.\n"
+						printf("\n  INVALID PIN. NO.\n  WARNING - YOU HAVE ONLY 3 ATTEMPTS TO LOG INTO YOUR ACC.\n"
 							"  YOU HAVE ONLY %d ATTEMPT(S) LEFT\n", 3 - currCust->lock);
 						readKey();
 					}
@@ -129,8 +110,8 @@ int main() {
 				do { //customer menu loop starts
 					printHeader("MAIN MENU > CUSTOMER MENU", currCust->name, 0);
 					printBreak();
-					printf("\n\t1 -> DEPOSITS\n\t2 -> WITHDRAWALS/TRANSFERS\n\n\t  SELECT > ");
-					nSel = validIpt(-1, 2);
+					printf("\n\t1 -> DEPOSITS\n\t2 -> WITHDRAWALS/TRANSFERS\n\t3 -> CHANGE PIN. NO.\n\n\t  SELECT > ");
+					nSel = validIpt(-1, 3);
 					switch (nSel) {
 					case 1: //deposits subsystem
 						nATM = randomATM(1);
@@ -177,6 +158,9 @@ int main() {
 							}
 						} while (nSel != 0); //withdrawals/transfers subsystem loop ends
 						reset(&chSel, &nSel, &nATM);
+						continue;
+					case 3:
+						resetPassw(currCust);
 						continue;
 					case 0: //back
 						break;

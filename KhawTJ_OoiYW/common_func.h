@@ -156,13 +156,14 @@ char* setPass(char* msg, int limit, CUSTOMER *cust) {
 	do {
 		passw[0] = passw2[0] = '\0';
 		valid = true;
-		printHeader("RESET PASSWORD", "",  0);
+		if (limit == 5) printHeader("RESET PIN. NO.", "",  0);
+		else printHeader("RESET PASSWORD", "",  0);
 		//prompt user to enter and re-enter new password
-		printf("\n  %s\n\n\t  ACC. NO. : %s\n\n  NEW PASSWORD > ", msg, cust->accNo);
-		scanf("%[^\n]", passw);
+		printf("\n  %s\n\n\t  ACC. NO. : %s\n\n  NEW %s > ", msg, cust->accNo, (limit==5)?"PIN. NO.":"PASSWORD");
+		scanf(" %[^\n]", passw);
 		discard_junk();
-		printf("\n  RE-ENTER NEW PASSWORD > ");
-		scanf("%[^\n]", passw2);
+		printf("\n  RE-ENTER NEW %s > ", (limit==5)?"PIN. NO.":"PASSWORD");
+		scanf(" %[^\n]", passw2);
 		discard_junk();
 
 		//validation for pin. no.
@@ -203,7 +204,7 @@ char* setPass(char* msg, int limit, CUSTOMER *cust) {
 		//if password and re-entred password do not match to each other
 		if (strcmp(passw, passw2) != 0) {
 			valid = false;
-			printf("\n  RE-ENTRED PASSWORD DID NOT MATCH WITH THE PREVIOUS ONE\n");
+			printf("\n  RE-ENTRED %s DID NOT MATCH WITH THE PREVIOUS ONE\n", (limit==5)?"PIN. NO.":"PASSWORD");
 		}
 
 		//user is prompted to try again when the password/pin. no. is invalid
@@ -215,6 +216,32 @@ char* setPass(char* msg, int limit, CUSTOMER *cust) {
 
 	//otherwise returns the valid password
 	return passw2;
+}
+
+CUSTOMER *findAcc(CUSTOMER *storage, char *accNo, int custCount) {
+	CUSTOMER *currCust = nullptr;
+	//the system will jump back to main menu if user key in "0"
+	if (strcmp(accNo, "0") == 0)
+		return nullptr;
+
+	//check for the existance of the acc. no. entered by user
+	for (int i = 0; i < custCount; i++) {
+		if (strcmp(accNo, storage[i].accNo) == 0) {
+
+			//if the acc. no. entered by user does exist, the currCust ptr shall point to his acc.
+			currCust = &storage[i];
+			break;
+		}
+	}
+
+	//if the acc. no. entered by user is not found, system shall prompt user for entering again
+	if (currCust == nullptr) {
+		printHeader("ERROR - ACC. NOT FOUND", "", 0);
+		printf("\n  THE ACC. NO. YOU HAD ENTERED WAS NOT FOUND/INVALID\n\n  ACC. NO. : %s\n\n  PLEASE TRY AGAIN\n", accNo);
+		readKey();
+		return nullptr;
+	}
+	return currCust;
 }
 
 //file r/w functions--------------------------------------------------------

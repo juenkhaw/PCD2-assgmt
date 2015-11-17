@@ -13,8 +13,8 @@ THERE WILL BE <strong>NO UPDATE</strong> FOR DEPOSIT/WITHDRAWAL FUNCTIONS
 
 BASIC
 
-- Cash deposit
-- Cheque deposit
+- <s>Deposit</s>
+- <s>Cheque deposit</s>
 - <s>Withdrawal</s>
 - <s>Funds transfer</s>
 

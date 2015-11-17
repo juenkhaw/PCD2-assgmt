@@ -19,7 +19,7 @@ BASIC
 - <s>Funds transfer</s>
 
 ADDITIONAL
-- Change password
+- <s>Change password</s>
 - Check the bank balance, total deposit and withdrawal etc.
 - Account transaction drill down report
 
@@ -37,7 +37,7 @@ BASIC
 ADDITIONAL
 - <s>Unlock the locked account</s>
 - Register for customer/manager
-- Change passw
+- Change password
 - Flow of funds of the customers (all of the transactions etc.)
 
 <h3><strong>Design</strong></h3>

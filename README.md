@@ -13,8 +13,8 @@ THERE WILL BE <strong>NO UPDATE</strong> FOR DEPOSIT/WITHDRAWAL FUNCTIONS
 
 BASIC
 
-- Cash deposit
-- Cheque deposit
+- <s>Deposit</s>
+- <s>Cheque deposit</s>
 - <s>Withdrawal</s>
 - <s>Funds transfer</s>
 
@@ -30,7 +30,7 @@ BASIC
 - Cash deposit log
 - Cheque deposit log
 - <s>Withdrawal log</s>
-- Funds transfer log
+- <s>Funds transfer log</s>
 - Cheque clearing
 - High withdrawals alert
 

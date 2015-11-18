@@ -103,7 +103,11 @@ int main() {
 						nSel = validIpt(-1, 2);
 						switch (nSel) { //deposits subsystem starts
 						case 1: //cash deposits
+						cash_dpFunc(cashdp, currCust, nATM);
+						break;
 						case 2: //cheque deposits
+						cheque_dpFunc(chequedp, currCust, nATM);
+						break;
 						case 0: //back
 							break;
 						case -1: //quit

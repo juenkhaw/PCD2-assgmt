@@ -10,67 +10,7 @@ inline void discard_junk() {
 	while ((c = getchar()) != '\n'&&c != EOF);
 }
 
-//sustain the screen from being clear
-void readKey() {
-	printf("\n  PRESS ANY KEY TO CONTINUE...\n");
-	system("pause>nul");
-}
-
-//reset the value
-void reset(char *chSel, int *nSel, int *nATM) {
-	*chSel = 'N';
-	*nSel = -2;
-	*nATM = 0;
-}
-
-//print the time on a console with a fixed format : c can only be ' ' or '\n'
-void printTime() {
-	SYSTEMTIME t;
-	GetLocalTime(&t);
-	printf("%04d-%02d-%02d %02d:%02d:%02d\n", t.wYear, t.wMonth, t.wDay, t.wHour, t.wMinute, t.wSecond);
-}
-
-//set the system time into time struct (memory)
-TIME setTime() {
-	TIME buf;
-	SYSTEMTIME t;
-	GetLocalTime(&t);
-	buf.yr = t.wYear;
-	buf.mth = t.wMonth;
-	buf.dy = t.wDay;
-	buf.hr = t.wHour;
-	buf.min = t.wMinute;
-	buf.sec = t.wSecond;
-	return buf;
-}
-
-//print the header : leave name and atm empty if there is no deposit or withdrawal customer function
-void printHeader(char* dir, char *name, int nATM) {
-	system("cls");
-	printf("\n  TARBANK BANKING SYSTEM    ");
-	(nATM != 0) ? printf("ATM %02d     ", nATM) : printf("ATM n/a    ");
-	printTime();
-	if (strcmp(name, "") != 0)
-		printf("  WELCOME, %s\n", name);
-	printf("  %s\n", dir);
-	for (int i = 0; i < 79; i++) printf("=");
-	printf("\n");
-}
-
-//print exit screen : exp is to determine exit code
-void printExit(char* msg, char* exception) {
-	system("cls");
-	printf("\n  TARBANK BANKING SYSTEM    ATM n/a    ");
-	printTime();
-	printf("  EXIT CODE : %s\n\n  %s\n", exception, msg);
-	for (int i = 0; i < 78; i++) printf("=");
-	printf("\n");
-}
-
-// print the fixed menu
-void printBreak() {
-	printf("\n\t0 -> BACK\n       -1 -> QUIT\n");
-}
+//input validating fucntion--------------------------------------------------------
 
 //accept, validate and return character input
 char validIpt(char* msg) {
@@ -117,10 +57,67 @@ double validIpt() {
 
 		//remove the junk inside the input buffer
 		(check != 2 || c != '\n') ? discard_junk() : 0;
-	} while ((check != 2 || c != '\n')&&printf("\n  INVALID INPUT DETECTED\n  PLEASE TRY AGAIN > "));
+	} while ((check != 2 || c != '\n') && printf("\n  INVALID INPUT DETECTED\n  PLEASE TRY AGAIN > "));
 
 	//return the valid double input
 	return ipt;
+}
+
+//main menu functions----------------------------------------------------------
+
+//sustain the screen from being clear
+void readKey() {
+	printf("\n  PRESS ANY KEY TO CONTINUE...\n");
+	system("pause>nul");
+}
+
+//print the time on a console with a fixed format : c can only be ' ' or '\n'
+void printTime() {
+	SYSTEMTIME t;
+	GetLocalTime(&t);
+	printf("%04d-%02d-%02d %02d:%02d:%02d\n", t.wYear, t.wMonth, t.wDay, t.wHour, t.wMinute, t.wSecond);
+}
+
+//set the system time into time struct (memory)
+TIME setTime() {
+	TIME buf;
+	SYSTEMTIME t;
+	GetLocalTime(&t);
+	buf.yr = t.wYear;
+	buf.mth = t.wMonth;
+	buf.dy = t.wDay;
+	buf.hr = t.wHour;
+	buf.min = t.wMinute;
+	buf.sec = t.wSecond;
+	return buf;
+}
+
+//print the header : leave name and atm empty if there is no deposit or withdrawal customer function
+void printHeader(char* dir, char *name, int nATM) {
+	system("cls");
+	printf("\n  TARBANK BANKING SYSTEM    ");
+	(nATM != 0) ? printf("ATM %02d     ", nATM) : printf("ATM n/a    ");
+	printTime();
+	if (strcmp(name, "") != 0)
+		printf("  WELCOME, %s\n", name);
+	printf("  %s\n", dir);
+	for (int i = 0; i < 79; i++) printf("=");
+	printf("\n");
+}
+
+//print exit screen : exception is to determine exit code
+void printExit(char* msg, char* exception) {
+	system("cls");
+	printf("\n  TARBANK BANKING SYSTEM    ATM n/a    ");
+	printTime();
+	printf("  EXIT CODE : %s\n\n  %s\n", exception, msg);
+	for (int i = 0; i < 78; i++) printf("=");
+	printf("\n");
+}
+
+// print the fixed menu
+void printBreak() {
+	printf("\n\t0 -> BACK\n       -1 -> QUIT\n");
 }
 
 //generate random ATM number
@@ -133,26 +130,47 @@ int randomATM(int nSel) {
 	return atm;
 }
 
-//used in exception section only
-void printError(int exception) {
-	//runtime error
-	if (exception == -11)
-		printExit("EXCEPTION OCCURED - FAILED TO OPEN \"CUSTOMER.TXT\"", "E1");
-	if (exception == -12)
-		printExit("EXCEPTION OCCURED - FAILED TO OPEN \"MANAGER.TXT\"", "E2");
-	if (exception == -13)
-		printExit("EXCEPTION OCCURED - POSSIBLE DATA LOSS IN \"CUSTOMER\"", "E3");
-	if (exception == -14)
-		printExit("EXCEPTION OCCURED - POSSIBLE DATA LOSS IN \"MANAGET.TXT\"", "E4");
-	if (exception == -15)
-		printExit("EXCEPTION OCCURED - POSSIBLE DATA LOSS IN \"WITHDRAWALS.DAT\"", "E5");
-	if (exception == -16)
-		printExit("EXCEPTION OCCURED - POSSIBLE DATA LOSS IN \"TRANSFERS.DAT\"", "E6");
+//confirmation of quiting the system
+void confirmBreak(char *chSel) {
+	*chSel = 'N';
+	*chSel = validIpt("TERMINATE THE CURRENT PROCESS AND QUIT?");
+	if (*chSel == 'Y') throw 0;
+}
+
+//commonly-used functions--------------------------------------------
+
+//accept and validate the password : customer version
+char* readPassw(CUSTOMER *currCust) {
+	char passw[7];
+	do {
+		passw[0] = '\0';
+		scanf(" %6[^\n]", passw);
+		if (strcmp("0", passw) == 0) return "0";
+		if (strcmp(currCust->PIN, passw) == 0) return passw;
+		else {
+			currCust->lock++;
+			if (currCust->lock == 3) throw - 1;
+			printf("\n  INVALID PIN. NO.\n  WARNING - YOU HAVE ONLY %d ATTEMPT(S) LEFT\n  PLEASE TRY AGAIN > ", 3 - currCust->lock);
+		}
+	} while (1);
+}
+
+//accept and validate the password : manager version
+char* readPassw(MANAGER *currMnger) {
+	char passw[25];
+	do {
+		passw[0] = '\0';
+		scanf(" %24[^\n]", passw);
+		if (strcmp("0", passw) == 0) return "0";
+		if (strcmp(currMnger->passw, passw) == 0) return passw;
+		else
+			printf("\n  INVALID PASSWORD - PLEASE TRY AGAIN > ");
+	} while (1);
 }
 
 //read and set the password : set limit to 5 for pin. no. / 23 for passw
-char* setPass(char* msg, int passwLength, CUSTOMER *currCust, MANAGER *currMnger) {
-	char passw[24], passw2[24], valid;
+char* setPassw(char* msg, int passwLength, CUSTOMER *currCust, MANAGER *currMnger) {
+	char passw[25], passw2[25], valid;
 	do {
 		passw[0] = passw2[0] = '\0';
 		valid = true;
@@ -163,10 +181,10 @@ char* setPass(char* msg, int passwLength, CUSTOMER *currCust, MANAGER *currMnger
 			printf("\n  %s\n\n\t  ACC. NO. : %s\n\n  NEW PIN. NO. > ", msg, currCust->accNo);
 		else
 			printf("\n  %s\n\n\t  ID. NO. : %s\n\n  NEW PASSWORD > ", msg, currMnger->ID);
-		scanf(" %[^\n]", passw);
+		scanf(" %24[^\n]", passw);
 		discard_junk();
 		printf("\n  RE-ENTER NEW %s > ", (passwLength==5)?"PIN. NO.":"PASSWORD");
-		scanf(" %[^\n]", passw2);
+		scanf(" %24[^\n]", passw2);
 		discard_junk();
 
 		//validation for pin. no.
@@ -223,29 +241,22 @@ char* setPass(char* msg, int passwLength, CUSTOMER *currCust, MANAGER *currMnger
 
 //seek for a customer from the customer list
 CUSTOMER *findAcc(CUSTOMER *cust, char *accNo, int custCount) {
-	CUSTOMER *currCust = nullptr;
 	//the system will jump back to main menu if user key in "0"
-	if (strcmp(accNo, "0") == 0)
-		return nullptr;
+	if (strcmp(accNo, "0") == 0) return nullptr;
 
 	//check for the existance of the acc. no. entered by user
 	for (int i = 0; i < custCount; i++) {
 		if (strcmp(accNo, cust[i].accNo) == 0) {
-
 			//if the acc. no. entered by user does exist, the currCust ptr shall point to his acc.
-			currCust = &cust[i];
-			break;
+			return &cust[i];
 		}
 	}
 
 	//if the acc. no. entered by user is not found, system shall prompt user for entering again
-	if (currCust == nullptr) {
-		printHeader("ERROR - ACC. NOT FOUND", "", 0);
-		printf("\n  THE ACC. NO. YOU HAD ENTERED WAS NOT FOUND/INVALID\n\n  ACC. NO. : %s\n\n  PLEASE TRY AGAIN\n", accNo);
-		readKey();
-		return nullptr;
-	}
-	return currCust;
+	printHeader("ERROR - ACC. NOT FOUND", "", 0);
+	printf("\n  THE ACC. NO. YOU HAD ENTERED WAS NOT FOUND/INVALID\n\n  ACC. NO. : %s\n\n  PLEASE TRY AGAIN\n", accNo);
+	readKey();
+	return nullptr;
 }
 
 //seek for a manager from the manager list
@@ -364,4 +375,21 @@ void writeF(FILE *custINF, CUSTOMER *cust, int custCount) {
 			tmp->accNo, tmp->PIN, strcat(tmp->name, "_"), tmp->gender, strcat(tmp->adds, "_"), strcat(tmp->state, "_"), tmp->hp, tmp->lock, tmp->bal,
 			tmp2->dy, tmp2->mth, tmp2->yr, tmp2->hr, tmp2->min, tmp2->sec);
 	}
+}
+
+//used in exception section only
+void printError(int exception) {
+	//runtime error
+	if (exception == -11)
+		printExit("EXCEPTION OCCURED - FAILED TO OPEN \"CUSTOMER.TXT\"", "E1");
+	if (exception == -12)
+		printExit("EXCEPTION OCCURED - FAILED TO OPEN \"MANAGER.TXT\"", "E2");
+	if (exception == -13)
+		printExit("EXCEPTION OCCURED - POSSIBLE DATA LOSS IN \"CUSTOMER\"", "E3");
+	if (exception == -14)
+		printExit("EXCEPTION OCCURED - POSSIBLE DATA LOSS IN \"MANAGET.TXT\"", "E4");
+	if (exception == -15)
+		printExit("EXCEPTION OCCURED - POSSIBLE DATA LOSS IN \"WITHDRAWALS.DAT\"", "E5");
+	if (exception == -16)
+		printExit("EXCEPTION OCCURED - POSSIBLE DATA LOSS IN \"TRANSFERS.DAT\"", "E6");
 }

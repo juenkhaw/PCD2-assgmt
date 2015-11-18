@@ -45,10 +45,10 @@ TIME setTime() {
 }
 
 //print the header : leave name and atm empty if there is no deposit or withdrawal customer function
-void printHeader(char* dir, char *name, int atm) {
+void printHeader(char* dir, char *name, int nATM) {
 	system("cls");
 	printf("\n  TARBANK BANKING SYSTEM    ");
-	(atm != 0) ? printf("ATM %02d     ", atm) : printf("ATM n/a    ");
+	(nATM != 0) ? printf("ATM %02d     ", nATM) : printf("ATM n/a    ");
 	printTime();
 	if (strcmp(name, "") != 0)
 		printf("  WELCOME, %s\n", name);
@@ -58,11 +58,11 @@ void printHeader(char* dir, char *name, int atm) {
 }
 
 //print exit screen : exp is to determine exit code
-void printExit(char* msg, char* exp) {
+void printExit(char* msg, char* exception) {
 	system("cls");
 	printf("\n  TARBANK BANKING SYSTEM    ATM n/a    ");
 	printTime();
-	printf("  EXIT CODE : %s\n\n  %s\n", exp, msg);
+	printf("  EXIT CODE : %s\n\n  %s\n", exception, msg);
 	for (int i = 0; i < 78; i++) printf("=");
 	printf("\n");
 }
@@ -91,7 +91,7 @@ char validIpt(char* msg) {
 }
 
 //accept, validate and return integer input
-int validIpt(int lLimit, int uLimit) {
+int validIpt(int lwrLimit, int uprLimit) {
 	int ipt, check;
 	char c;
 	do {
@@ -100,7 +100,7 @@ int validIpt(int lLimit, int uLimit) {
 
 		//remove the junk inside the input buffer
 		(check != 2 || c != '\n') ? discard_junk() : 0;
-	} while ((check != 2 || c != '\n' || ipt < lLimit || ipt > uLimit) && printf("\n  INVALID INPUT DETECTED\n  PLEASE TRY AGAIN > "));
+	} while ((check != 2 || c != '\n' || ipt < lwrLimit || ipt > uprLimit) && printf("\n  INVALID INPUT DETECTED\n  PLEASE TRY AGAIN > "));
 
 	//return the valid int input
 	return ipt;
@@ -124,50 +124,53 @@ double validIpt() {
 }
 
 //generate random ATM number
-int randomATM(int sel) {
+int randomATM(int nSel) {
 	int atm = 0;
 	srand(time(NULL));
 
 	//generate random number : 1 to 5 for deposit / 6 to 10 for withdrawal
-	atm = rand() % 5 + ((sel == 1) ? 1 : 6);
+	atm = rand() % 5 + ((nSel == 1) ? 1 : 6);
 	return atm;
 }
 
 //used in exception section only
-void printError(int exp) {
+void printError(int exception) {
 	//runtime error
-	if (exp == -11)
+	if (exception == -11)
 		printExit("EXCEPTION OCCURED - FAILED TO OPEN \"CUSTOMER.TXT\"", "E1");
-	if (exp == -12)
+	if (exception == -12)
 		printExit("EXCEPTION OCCURED - FAILED TO OPEN \"MANAGER.TXT\"", "E2");
-	if (exp == -13)
+	if (exception == -13)
 		printExit("EXCEPTION OCCURED - POSSIBLE DATA LOSS IN \"CUSTOMER\"", "E3");
-	if (exp == -14)
+	if (exception == -14)
 		printExit("EXCEPTION OCCURED - POSSIBLE DATA LOSS IN \"MANAGET.TXT\"", "E4");
-	if (exp == -15)
+	if (exception == -15)
 		printExit("EXCEPTION OCCURED - POSSIBLE DATA LOSS IN \"WITHDRAWALS.DAT\"", "E5");
-	if (exp == -16)
+	if (exception == -16)
 		printExit("EXCEPTION OCCURED - POSSIBLE DATA LOSS IN \"TRANSFERS.DAT\"", "E6");
 }
 
 //read and set the password : set limit to 5 for pin. no. / 23 for passw
-char* setPass(char* msg, int limit, CUSTOMER *cust) {
+char* setPass(char* msg, int passwLength, CUSTOMER *currCust, MANAGER *currMnger) {
 	char passw[24], passw2[24], valid;
 	do {
 		passw[0] = passw2[0] = '\0';
 		valid = true;
-		if (limit == 5) printHeader("RESET PIN. NO.", "",  0);
+		if (passwLength == 5) printHeader("RESET PIN. NO.", "",  0);
 		else printHeader("RESET PASSWORD", "",  0);
 		//prompt user to enter and re-enter new password
-		printf("\n  %s\n\n\t  ACC. NO. : %s\n\n  NEW %s > ", msg, cust->accNo, (limit==5)?"PIN. NO.":"PASSWORD");
+		if (passwLength == 5)
+			printf("\n  %s\n\n\t  ACC. NO. : %s\n\n  NEW PIN. NO. > ", msg, currCust->accNo);
+		else
+			printf("\n  %s\n\n\t  ID. NO. : %s\n\n  NEW PASSWORD > ", msg, currMnger->ID);
 		scanf(" %[^\n]", passw);
 		discard_junk();
-		printf("\n  RE-ENTER NEW %s > ", (limit==5)?"PIN. NO.":"PASSWORD");
+		printf("\n  RE-ENTER NEW %s > ", (passwLength==5)?"PIN. NO.":"PASSWORD");
 		scanf(" %[^\n]", passw2);
 		discard_junk();
 
 		//validation for pin. no.
-		if (limit == 5) {
+		if (passwLength == 5) {
 			for (int i = 0; i < 5; i++) {
 
 				//if pin. no. contains non-digit character
@@ -179,7 +182,7 @@ char* setPass(char* msg, int limit, CUSTOMER *cust) {
 			}
 
 			//if pin. no. does not contain exactly 5 digit characters
-			if (passw[limit]!='\0') {
+			if (passw[passwLength]!='\0') {
 				printf("\n  PIN. NO. MUST CONTAIN EXACTLY 5 DIGIT NUMBERS\n");
 				valid = false;
 			}
@@ -204,7 +207,7 @@ char* setPass(char* msg, int limit, CUSTOMER *cust) {
 		//if password and re-entred password do not match to each other
 		if (strcmp(passw, passw2) != 0) {
 			valid = false;
-			printf("\n  RE-ENTRED %s DID NOT MATCH WITH THE PREVIOUS ONE\n", (limit==5)?"PIN. NO.":"PASSWORD");
+			printf("\n  RE-ENTRED %s DID NOT MATCH WITH THE PREVIOUS ONE\n", (passwLength==5)?"PIN. NO.":"PASSWORD");
 		}
 
 		//user is prompted to try again when the password/pin. no. is invalid
@@ -218,7 +221,8 @@ char* setPass(char* msg, int limit, CUSTOMER *cust) {
 	return passw2;
 }
 
-CUSTOMER *findAcc(CUSTOMER *storage, char *accNo, int custCount) {
+//seek for a customer from the customer list
+CUSTOMER *findAcc(CUSTOMER *cust, char *accNo, int custCount) {
 	CUSTOMER *currCust = nullptr;
 	//the system will jump back to main menu if user key in "0"
 	if (strcmp(accNo, "0") == 0)
@@ -226,10 +230,10 @@ CUSTOMER *findAcc(CUSTOMER *storage, char *accNo, int custCount) {
 
 	//check for the existance of the acc. no. entered by user
 	for (int i = 0; i < custCount; i++) {
-		if (strcmp(accNo, storage[i].accNo) == 0) {
+		if (strcmp(accNo, cust[i].accNo) == 0) {
 
 			//if the acc. no. entered by user does exist, the currCust ptr shall point to his acc.
-			currCust = &storage[i];
+			currCust = &cust[i];
 			break;
 		}
 	}
@@ -242,6 +246,25 @@ CUSTOMER *findAcc(CUSTOMER *storage, char *accNo, int custCount) {
 		return nullptr;
 	}
 	return currCust;
+}
+
+//seek for a manager from the manager list
+MANAGER *findAcc(MANAGER *mnger, char *id, int mngerCount) {
+	MANAGER *currMnger = nullptr;
+	if (strcmp(id, "0") == 0) return nullptr;
+	for (int i = 0; i < mngerCount; i++) {
+		if (strcmp(id, mnger[i].ID) == 0) {
+			currMnger = &mnger[i];
+			break;
+		}
+	}
+	if (currMnger == nullptr) {
+		printHeader("ERROR - ID. NOT FOUND", "", 0);
+		printf("\n  THE ID. NO. YOU HAD ENTERED WAS NOT FOUND/INVALID\n\n  ID. NO. : %s\n\n  PLEASE TRY AGAIN\n", id);
+		readKey();
+		return nullptr;
+	}
+	return currMnger;
 }
 
 //file r/w functions--------------------------------------------------------
@@ -267,16 +290,16 @@ void printTime(FILE *buf) {
 }
 
 //read customer.txt and store into a struct array : parameter -> tag is just to differentiate the overloaded functions which read different files
-CUSTOMER* readF(FILE *buf, int *size, CUSTOMER *tag) {
+CUSTOMER* readF(FILE *custINF, int *custCount, CUSTOMER *tag) {
 	int check;
 	CUSTOMER *storage;
 
 	//compute the number of customers inside the "Customer.txt"
-	*size = countEntry(buf);
+	*custCount = countEntry(custINF);
 
 	//declare a dynamic allocated CUSTOMER struct array
-	storage = new CUSTOMER[*size];
-	for (int i = 0; i < *size; i++) {
+	storage = new CUSTOMER[*custCount];
+	for (int i = 0; i < *custCount; i++) {
 		check = 0;
 
 		//create struct pointer to replace customer[i] and customer[i].lastTrans
@@ -284,7 +307,7 @@ CUSTOMER* readF(FILE *buf, int *size, CUSTOMER *tag) {
 		TIME *tmp2 = &storage[i].lastTrans;
 
 		//obtain the customers' details and store into "cust"
-		check = fscanf(buf, "%[^|]|%[^|]|%[^_]%*[^|]|%c|%[^_]%*[^|]|%[^_]%*[^|]|%[^|]|%d|%lf %d-%d-%d %d:%d:%d\n",
+		check = fscanf(custINF, "%[^|]|%[^|]|%[^_]%*[^|]|%c|%[^_]%*[^|]|%[^_]%*[^|]|%[^|]|%d|%lf %d-%d-%d %d:%d:%d\n",
 			tmp->accNo, tmp->PIN, tmp->name, &tmp->gender, tmp->adds, tmp->state, tmp->hp, &tmp->lock, &tmp->bal,
 			&tmp2->dy, &tmp2->mth, &tmp2->yr, &tmp2->hr, &tmp2->min, &tmp2->sec);
 		//printf("%s\n%s\n%s\n%c\n%s\n%s\n%s\n%d\n%.2lf\n%d-%d-%d %d:%d:%d\n\n", 
@@ -298,23 +321,23 @@ CUSTOMER* readF(FILE *buf, int *size, CUSTOMER *tag) {
 }
 
 //read manager.txt and store into a struct array : parameter -> tag is just to differentiate the overloaded functions which read different files
-MANAGER* readF(FILE *buf, int *size, MANAGER *tag) {
+MANAGER* readF(FILE *mngerINF, int *mngerCount, MANAGER *tag) {
 	int check;
 	MANAGER *storage;
 
 	//compute the number of customers inside the "Customer.txt"
-	*size = countEntry(buf);
+	*mngerCount = countEntry(mngerINF);
 
 	//declare a dynamic allocated CUSTOMER struct array
-	storage = new MANAGER[*size];
-	for (int i = 0; i < *size; i++) {
+	storage = new MANAGER[*mngerCount];
+	for (int i = 0; i < *mngerCount; i++) {
 		check = 0;
 
 		//create struct pointer to replace mnger[i]
 		MANAGER *tmp = &storage[i];
 
 		//obtain the managers' details and store into "mnger"
-		check = fscanf(buf, "%[^|]|%[^_]%*[^|]|%[^\n]\n", tmp->ID, tmp->passw, tmp->name);
+		check = fscanf(mngerINF, "%[^|]|%[^_]%*[^|]|%[^\n]\n", tmp->ID, tmp->passw, tmp->name);
 		//printf("%s\n%s\n%s\n\n", tmp->ID, tmp->passw, tmp->name);
 
 		//if there is possible lost data, return the error code
@@ -324,20 +347,20 @@ MANAGER* readF(FILE *buf, int *size, MANAGER *tag) {
 }
 
 //write and update customer.txt
-void writeF(FILE *buf, CUSTOMER *storage, int size) {
-	rewind(buf);
-	for (int i = 0; i < size; i++) {
+void writeF(FILE *custINF, CUSTOMER *cust, int custCount) {
+	rewind(custINF);
+	for (int i = 0; i < custCount; i++) {
 
 		//create temporary pointer for address of struct below
-		CUSTOMER *tmp = &storage[i];
-		TIME *tmp2 = &storage[i].lastTrans;
+		CUSTOMER *tmp = &cust[i];
+		TIME *tmp2 = &cust[i].lastTrans;
 
 		//if the attempt to log in is not above 3, reset it back to 0
 		if (tmp->lock < 3)
 			tmp->lock = 0;
 
 		//update the data into the destination file
-		fprintf(buf, "%5s|%5s|%-35s\t|%c|%-28s\t|%-13s\t|%s|%d|%09.2lf %02d-%02d-%04d %02d:%02d:%02d\n",
+		fprintf(custINF, "%5s|%5s|%-35s\t|%c|%-28s\t|%-13s\t|%s|%d|%09.2lf %02d-%02d-%04d %02d:%02d:%02d\n",
 			tmp->accNo, tmp->PIN, strcat(tmp->name, "_"), tmp->gender, strcat(tmp->adds, "_"), strcat(tmp->state, "_"), tmp->hp, tmp->lock, tmp->bal,
 			tmp2->dy, tmp2->mth, tmp2->yr, tmp2->hr, tmp2->min, tmp2->sec);
 	}

@@ -26,6 +26,8 @@ int main() {
 	FILE *test = fopen("test.txt", "w+");
 
 	//variables for deposits
+	FILE *cashdp = fopen("CashDeposits.dat", "a+");
+	FILE *chequedp = fopen("ChequeDeposits.dat", "a+");
 
 	//variables for withdrawals
 	FILE *wdOUTF = fopen("Withdrawals.dat", "a+");
@@ -54,9 +56,10 @@ int main() {
 			switch (nSel) {
 			case 1: //customer menu
 				accNo[0] = pinNo[0] = '\0';
+				currCust = nullptr;
+
 				//customer log-in function
 				//reset the current customer pointer to null : currCust ptr is point to the customer who has logged in to his acc.
-				currCust = nullptr;
 				printHeader("LOG-IN : CUSTOMER", "", 0);
 				printf("\n\t0 -> BACK\n\n    PLEASE ENTER YOUR ACC. NO. > ");
 				scanf("%[^\n]", accNo);
@@ -102,7 +105,7 @@ int main() {
 				//if this is the customer's first time to log in his new acc.
 				if (currCust->lastTrans.yr == 0) {
 					strcpy(currCust->PIN, setPass("WELCOME, THIS IS YOUR FIRST TIME TO LOG INTO YOUR BANK ACC.\n"
-						"  FOR SECURITY CONCERN, YOU ARE RECOMMENDED TO RESET YOUR PIN. NO.", 5, currCust));
+						"  FOR SECURITY CONCERN, YOU ARE RECOMMENDED TO RESET YOUR PIN. NO.", 5, currCust, nullptr));
 					currCust->lastTrans = setTime();
 					throw 1;
 				}
@@ -123,18 +126,21 @@ int main() {
 							nSel = validIpt(-1, 2);
 							switch (nSel) {
 							case 1: //cash deposits
+								//cash_dpFunc(cashdp, currCust, nATM);
+								break;
 							case 2: //cheque deposits
-								continue;
+								//chequeCheck(chequedp, currCust, nATM);
+								break;
 							case 0: //back
 								break;
 							case -1: //exit
 								chSel = validIpt("TERMINATE THE CURRENT PROCESS AND QUIT?");
 								if (chSel == 'Y') throw 0;
-								continue;
+								break;
 							}
 						} while (nSel != 0); //deposits subsystem loop ends
 						reset(&chSel, &nSel, &nATM);
-						continue;
+						break;
 					case 2: //withdrawals/transfers subsystem
 						nATM = randomATM(2);
 						do { //withdrawals/transfers subsystem loop starts
@@ -145,40 +151,40 @@ int main() {
 							switch (nSel) {
 							case 1: //cash withdrawal
 								wdFunc(wdOUTF, currCust, nATM);
-								continue;
+								break;
 							case 2: //cash/funds transfer
-								transFunc(transOUTF, currCust, cust, custCount, nATM);
-								continue;
+								transFunc(transOUTF, currCust, custCount, nATM);
+								break;
 							case 0: //back
 								break;
 							case -1: //exit
 								chSel = validIpt("TERMINATE THE CURRENT PROCESS AND QUIT?");
 								if (chSel == 'Y') throw 0;
-								continue;
+								break;
 							}
 						} while (nSel != 0); //withdrawals/transfers subsystem loop ends
 						reset(&chSel, &nSel, &nATM);
-						continue;
+						break;
 					case 3:
 						resetPassw(currCust);
-						continue;
+						break;
 					case 0: //back
 						break;
 					case -1: //exit
 						chSel = validIpt("TERMINATE THE CURRENT PROCESS AND QUIT?");
 						if (chSel == 'Y') throw 0;
-						continue;
+						break;
 					}
 				} while (nSel != 0); //customer menu loop ends
 				reset(&chSel, &nSel, &nATM);
-				continue;
+				break;
 			case 2: //manager menu
 				accNo[0] = pinNo[0] = '\0';
 				//manager log-in function
 				//reset the current manager pointer to null : currMnger is a ptr that pointed to the manager who has logged in
 				currMnger = nullptr;
 				printHeader("LOG-IN : MANAGER/STAFF", "", 0);
-				printf("\n\t0 -> BACK\n\n    PLEASE ENTER YOUR ID. NO. > ");
+				printf("\n\t0 -> BACK\n\n  PLEASE ENTER YOUR ID. NO. > ");
 				scanf("%[^\n]", accNo);
 				discard_junk();
 
@@ -219,8 +225,8 @@ int main() {
 				do { //manager menu loop starts
 					printHeader("MAIN MENU > MANAGER MENU", currMnger->name, 0);
 					printBreak();
-					printf("\n\t1 -> PRINT TRANSACTION LOGS\n\t2 -> PERFORM UPDATES\n\t3 -> ACCOUNTS MANAGEMENT\n\n\t  SELECT > ");
-					nSel = validIpt(-1, 3);
+					printf("\n\t1 -> PRINT TRANSACTION LOGS\n\t2 -> PERFORM UPDATES\n\t3 -> ACCOUNTS MANAGEMENT\n\t4 -> CHANGE PASSWORD\n\n\t  SELECT > ");
+					nSel = validIpt(-1, 4);
 					switch (nSel) {
 					case 1: //trans logs subsystem
 						do { //trans logs loop starts
@@ -231,23 +237,23 @@ int main() {
 							switch (nSel) {
 							case 1: //cash deposit log
 							case 2: //cheque deposit log
-								continue;
+								break;
 							case 3: //withdrawal log
 								printWdLog(wdOUTF);
-								continue;
+								break;
 							case 4: //funds transfer log
 								printTransLog(transOUTF);
-								continue;
+								break;
 							case 0: //back
 								break;
 							case -1: //exit
 								chSel = validIpt("TERMINATE THE CURRENT PROCESS AND QUIT?");
 								if (chSel == 'Y') throw 0;
-								continue;
+								break;
 							}
 						} while (nSel != 0); //trans logs loop ends
 						reset(&chSel, &nSel, &nATM);
-						continue;
+						break;
 					case 2: //perform updates subsystem
 						do {
 							printHeader("MAIN MENU > MANAGER MENU > PERFORM UPDATES", currMnger->name, 0);
@@ -257,17 +263,17 @@ int main() {
 							switch (nSel) {
 							case 1: //cheque clearing
 							case 2: //high withdrawals alert
-								continue;
+								break;
 							case 0: //back
 								break;
 							case -1: //exit
 								chSel = validIpt("TERMINATE THE CURRENT PROCESS AND QUIT?");
 								if (chSel == 'Y') throw 0;
-								continue;
+								break;
 							}
 						} while (nSel != 0);
 						reset(&chSel, &nSel, &nATM);
-						continue;
+						break;
 					case 3:
 						do {
 							printHeader("MAIN MENU > MANAGER MENU > ACCOUNTS MANAGEMENT", currMnger->name, 0);
@@ -277,35 +283,39 @@ int main() {
 							switch (nSel) {
 							case 1: //unlock account
 								unlockAcc(cust, custCount);
-								continue;
+								break;
 							case 2: //register for new customer/staff
-								continue;
+								break;
 							case 0: //back
 								break;
 							case -1: //exit
 								chSel = validIpt("TERMINATE THE CURRENT PROCESS AND QUIT?");
 								if (chSel == 'Y') throw 0;
-								continue;
+								break;
 							}
 						} while (nSel != 0);
 						reset(&chSel, &nSel, &nATM);
+						break;
+					case 4: //change password
+						resetPassw(currMnger);
+						break;
 					case 0: //back
 						break;
 					case -1: //exit
 						chSel = validIpt("TERMINATE THE CURRENT PROCESS AND QUIT?");
 						if (chSel == 'Y') throw 0;
-						continue;
+						break;
 					}
 				} while (nSel != 0); //manager menu loop ends
 				reset(&chSel, &nSel, &nATM);
-				continue;
+				break;
 			case 0: //exit
 			case -1: //exit
 				chSel = validIpt("TERMINATE THE CURRENT PROCESS AND QUIT?");
 				if (chSel == 'Y') throw 0;
-				continue;
+				break;
 			};
-		} while (1); //main menu loop ends
+		} while (chSel == 'N'|| nSel == -1); //main menu loop ends
 	}
 
 	catch (int exception) { //once error or point of termination has triggered, the code below shall excecute immediately
@@ -346,6 +356,8 @@ int main() {
 	fclose(mngerINF);
 	fclose(wdOUTF);
 	fclose(transOUTF);
+	fclose(cashdp);
+	fclose(chequedp);
 	fclose(test);
 	
 	return 0;

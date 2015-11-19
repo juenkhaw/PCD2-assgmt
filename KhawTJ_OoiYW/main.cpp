@@ -24,14 +24,15 @@ int main() {
 	FILE *custINF;
 	FILE *mngerINF;
 	FILE *test = fopen("test.txt", "w+");
+	FILE *test2 = fopen("test2.txt", "w+");
 
 	//variables for deposits
 	FILE *cashdp = fopen("CashDeposits.dat", "a+");
 	FILE *chequedp = fopen("ChequeDeposits.dat", "a+");
 
 	//variables for withdrawals
-	FILE *wdOUTF = fopen("Withdrawals.dat", "a+");
-	FILE *transOUTF = fopen("Transfers.dat", "a+");
+	FILE *wdOUTF = fopen("Withdrawals.dat", "a+b");
+	FILE *transOUTF = fopen("Transfers.dat", "a+b");
 
 	try { //start to seek for the runtime error and point to terminate the system
 
@@ -103,7 +104,9 @@ int main() {
 						nSel = validIpt(-1, 2);
 						switch (nSel) { //deposits subsystem starts
 						case 1: //cash deposits
+							break;
 						case 2: //cheque deposits
+							break;
 						case 0: //back
 							break;
 						case -1: //quit
@@ -124,7 +127,7 @@ int main() {
 								wdFunc(wdOUTF, currCust, nATM);
 								break;
 							case 2: //cash/funds transfers
-								transFunc(transOUTF, currCust, custCount, nATM);
+								transFunc(transOUTF, currCust, cust, custCount, nATM);
 								break;
 							case 0: //back
 								break;
@@ -281,7 +284,9 @@ int main() {
 	}
 
 	writeF(test, cust, custCount);
-	//writeF(custINF, cust, custCount);
+	writeF(custINF, cust, custCount);
+	writeF(test2, mnger, mngerCount);
+	writeF(mngerINF, mnger, mngerCount);
 
 	printf("\t\t<SYSTEM TERMINATED>\n\n");
 
@@ -297,6 +302,7 @@ int main() {
 	fclose(cashdp);
 	fclose(chequedp);
 	fclose(test);
+	fclose(test2);
 	
 	return 0;
 }

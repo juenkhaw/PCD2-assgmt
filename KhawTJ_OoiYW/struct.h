@@ -5,7 +5,7 @@ typedef struct {
 }TIME;
 
 typedef struct {
-	char ID[7], passw[18], name[31];
+	char ID[7], passw[25], name[31];
 }MANAGER;
 
 typedef struct {

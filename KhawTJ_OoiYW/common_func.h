@@ -211,6 +211,10 @@ char* setPassw(char* msg, int passwLength, CUSTOMER *currCust, MANAGER *currMnge
 
 			//if the password entered contains more than 23 characters
 			for (int i = 0; i < 24; i++) {
+				if (passw[i] == '\0' && i < 5) {
+					valid = false;
+					break;
+				}
 				if (passw[i] != '\0')
 					valid = false;
 				else {
@@ -219,7 +223,7 @@ char* setPassw(char* msg, int passwLength, CUSTOMER *currCust, MANAGER *currMnge
 				}
 			}
 			if (valid == false)
-				printf("\n  NEW PASSWORD MUST CONTAIN ONLY AT MOST 23 CHARACTERS\n");
+				printf("\n  NEW PASSWORD MUST CONTAIN ONLY AT MOST 23 CHARACTERS\n  AND AT LEAST 6 CHARACTERS\n\n");
 		}
 
 		//if password and re-entred password do not match to each other
@@ -371,9 +375,18 @@ void writeF(FILE *custINF, CUSTOMER *cust, int custCount) {
 			tmp->lock = 0;
 
 		//update the data into the destination file
-		fprintf(custINF, "%5s|%5s|%-35s\t|%c|%-28s\t|%-13s\t|%s|%d|%09.2lf %02d-%02d-%04d %02d:%02d:%02d\n",
+		fprintf(custINF, "%5s|%5s|%-36s|%c|%-29s|%-14s|%s|%d|%09.2lf %02d-%02d-%04d %02d:%02d:%02d\n",
 			tmp->accNo, tmp->PIN, strcat(tmp->name, "_"), tmp->gender, strcat(tmp->adds, "_"), strcat(tmp->state, "_"), tmp->hp, tmp->lock, tmp->bal,
 			tmp2->dy, tmp2->mth, tmp2->yr, tmp2->hr, tmp2->min, tmp2->sec);
+	}
+}
+
+//write and update manager.txt
+void writeF(FILE *mngerINF, MANAGER *mnger, int mngerCount) {
+	rewind(mngerINF);
+	for (int i = 0; i < mngerCount; i++) {
+		MANAGER *tmp = &mnger[i];
+		fprintf(mngerINF, "%s|%-25s|%s\n", tmp->ID, strcat(tmp->passw, "_"), tmp->name);
 	}
 }
 

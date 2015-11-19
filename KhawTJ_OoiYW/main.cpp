@@ -284,9 +284,9 @@ int main() {
 	}
 
 	writeF(test, cust, custCount);
-	writeF(custINF, cust, custCount);
+	//writeF(custINF, cust, custCount);
 	writeF(test2, mnger, mngerCount);
-	writeF(mngerINF, mnger, mngerCount);
+	//writeF(mngerINF, mnger, mngerCount);
 
 	printf("\t\t<SYSTEM TERMINATED>\n\n");
 

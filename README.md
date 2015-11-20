@@ -38,7 +38,6 @@ ADDITIONAL
 - <s>Unlock the locked account</s>
 - Register for customer/manager
 - <s>Change password</s>
-- Flow of funds of the customers (all of the transactions etc.)
 
 <h3><strong>Design</strong></h3>
 - printHeader()

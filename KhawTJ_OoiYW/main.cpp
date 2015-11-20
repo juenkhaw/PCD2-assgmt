@@ -43,10 +43,8 @@ int main() {
 		if (!mngerINF) throw - 12;
 
 		//initializing process
-		//read and store the data from "Customer.txt"
+		//read and store the data from the txt or dat files
 		cust = readF(custINF, &custCount, cust);
-
-		//read and store the data from "Manager.txt"
 		mnger = readF(mngerINF, &mngerCount, mnger);
 
 		//main processing loop
@@ -70,7 +68,7 @@ int main() {
 				discard_junk();
 
 				//search for the acc no. in the customer list
-				currCust = findAcc(cust, accNo, custCount);
+				currCust = findAcc(cust, accNo, custCount, 0);
 
 				//if the acc is not found -> back
 				if (currCust == nullptr) break;
@@ -93,8 +91,8 @@ int main() {
 				do { //customer menu starts
 					printHeader("MAIN MENU > CUSTOMER MENU", currCust->name, 0);
 					printBreak();
-					printf("\n\t1 -> DEPOSITS\n\t2 -> WITHDRAWALS/TRANSFERS\n\t3 -> CHANGE PIN. NO.\n\n\t  SELECT > ");
-					nSel = validIpt(-1, 3);
+					printf("\n\t1 -> DEPOSITS\n\t2 -> WITHDRAWALS/TRANSFERS\n\t3 -> CHECK ACCOUNT BALANCE\n\t4 -> CHANGE PIN. NO.\n\n\t  SELECT > ");
+					nSel = validIpt(-1, 4);
 					switch (nSel) {
 					case 1: //deposit subsystem
 						nATM = randomATM(nSel);
@@ -138,7 +136,10 @@ int main() {
 						} while (nSel != 0); //withdrawal subsystem ends
 						nSel = -2;
 						break;
-					case 3: //change pin no.
+					case 3: //check balance
+						accDetails(currCust, wdOUTF, transOUTF, cashdp, chequedp);
+						break;
+					case 4: //change pin no.
 						resetPassw(currCust);
 						break;
 					case 0: //back

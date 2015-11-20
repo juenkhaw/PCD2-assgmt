@@ -71,11 +71,16 @@ void readKey() {
 	system("pause>nul");
 }
 
-//print the time on a console with a fixed format : c can only be ' ' or '\n'
+//print the time on a console with a fixed format
 void printTime() {
 	SYSTEMTIME t;
 	GetLocalTime(&t);
 	printf("%04d-%02d-%02d %02d:%02d:%02d\n", t.wYear, t.wMonth, t.wDay, t.wHour, t.wMinute, t.wSecond);
+}
+
+//print the time struct onto the console screen
+void printTime(TIME t) {
+	printf("%04d-%02d-%02d %02d:%02d:%02d", t.yr, t.mth, t.dy, t.hr, t.min, t.sec);
 }
 
 //set the system time into time struct (memory)
@@ -244,7 +249,7 @@ char* setPassw(char* msg, int passwLength, CUSTOMER *currCust, MANAGER *currMnge
 }
 
 //seek for a customer from the customer list
-CUSTOMER *findAcc(CUSTOMER *cust, char *accNo, int custCount) {
+CUSTOMER *findAcc(CUSTOMER *cust, char *accNo, int custCount, int nATM) {
 	//the system will jump back to main menu if user key in "0"
 	if (strcmp(accNo, "0") == 0) return nullptr;
 
@@ -252,12 +257,12 @@ CUSTOMER *findAcc(CUSTOMER *cust, char *accNo, int custCount) {
 	for (int i = 0; i < custCount; i++) {
 		if (strcmp(accNo, cust[i].accNo) == 0) {
 			//if the acc. no. entered by user does exist, the currCust ptr shall point to his acc.
-			return &cust[i];
+			return &cust[i];	
 		}
 	}
 
 	//if the acc. no. entered by user is not found, system shall prompt user for entering again
-	printHeader("ERROR - ACC. NOT FOUND", "", 0);
+	printHeader("ERROR - ACC. NOT FOUND", "", nATM);
 	printf("\n  THE ACC. NO. YOU HAD ENTERED WAS NOT FOUND/INVALID\n\n  ACC. NO. : %s\n\n  PLEASE TRY AGAIN\n", accNo);
 	readKey();
 	return nullptr;
@@ -357,6 +362,43 @@ MANAGER* readF(FILE *mngerINF, int *mngerCount, MANAGER *tag) {
 
 		//if there is possible lost data, return the error code
 		if (check != 3) throw - 14;
+	}
+	return storage;
+}
+
+//read withdrawal records and store into a dynamic struct array that is going to be returned
+BASEINFO* readF(FILE *wdOUTF, int *count, BASEINFO *tag) {
+	BASEINFO *storage, buf;
+	int check;
+	rewind(wdOUTF);
+
+	//compute the number of entry and store it on a dynamic struct array
+	while (fread(&buf, sizeof(BASEINFO), 1, wdOUTF) != 0)
+		(*count)++;
+	rewind(wdOUTF);
+	storage = new BASEINFO[*count];
+	for (int i = 0; i < *count; i++) {
+		check = fread(&storage[i], sizeof(BASEINFO), 1, wdOUTF);
+		if (check != 1) throw - 15;
+	}
+
+	return storage;
+}
+
+//read transfer records and store into a dynamic struct array that is going to be returned
+TRANSFER* readF(FILE *transOUTF, int *count, TRANSFER *tag) {
+	TRANSFER *storage, buf;
+	int check;
+	rewind(transOUTF);
+
+	//compute the number of entry and store it on a dynamic struct array
+	while (fread(&buf, sizeof(TRANSFER), 1, transOUTF) != 0)
+		(*count)++;
+	rewind(transOUTF);
+	storage = new TRANSFER[*count];
+	for (int i = 0; i < *count; i++) {
+		check = fread(&storage[i], sizeof(TRANSFER), 1, transOUTF);
+		if (check != 1) throw - 16;
 	}
 	return storage;
 }

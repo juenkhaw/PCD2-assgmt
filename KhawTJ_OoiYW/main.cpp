@@ -27,8 +27,8 @@ int main() {
 	FILE *test2 = fopen("test2.txt", "w+");
 
 	//variables for deposits
-	FILE *cashdp = fopen("CashDeposits.dat", "a+");
-	FILE *chequedp = fopen("ChequeDeposits.dat", "a+");
+	FILE *cashdp = fopen("CashDeposits.dat", "a+b");
+	FILE *chequedp = fopen("ChequeDeposits.dat", "a+b");
 
 	//variables for withdrawals
 	FILE *wdOUTF = fopen("Withdrawals.dat", "a+b");
@@ -95,21 +95,24 @@ int main() {
 					nSel = validIpt(-1, 4);
 					switch (nSel) {
 					case 1: //deposit subsystem
-						nATM = randomATM(nSel);
-						printHeader("MAIN MENU > CUSTOMER MENU > DEPOSITS SUBSYSTEM", currCust->name, nATM);
-						printBreak();
-						printf("\n\t1 -> CASH DEPOSITS\n\t2 -> CHEQUE DEPOSITS\n\n\t  SELECT > ");
-						nSel = validIpt(-1, 2);
-						switch (nSel) { //deposits subsystem starts
-						case 1: //cash deposits
-							break;
-						case 2: //cheque deposits
-							break;
-						case 0: //back
-							break;
-						case -1: //quit
-							confirmBreak(&chSel);
-							break;
+						do {
+							nATM = randomATM(nSel);
+							printHeader("MAIN MENU > CUSTOMER MENU > DEPOSITS SUBSYSTEM", currCust->name, nATM);
+							printBreak();
+							printf("\n\t1 -> CASH DEPOSITS\n\t2 -> CHEQUE DEPOSITS\n\n\t  SELECT > ");
+							nSel = validIpt(-1, 2);
+							switch (nSel) { //deposits subsystem starts
+							case 1: //cash deposits
+								cash_dpFunc(cashdp, currCust, nATM);
+								break;
+							case 2: //cheque deposits
+								break;
+							case 0: //back
+								break;
+							case -1: //quit
+								confirmBreak(&chSel);
+								break;
+							}
 						} while (nSel != 0); //deposits subsystem ends
 						nSel = -2;
 						break;

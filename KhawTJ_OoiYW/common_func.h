@@ -368,7 +368,7 @@ MANAGER* readF(FILE *mngerINF, int *mngerCount, MANAGER *tag) {
 
 //read withdrawal records and store into a dynamic structure array that is going to be returned
 BASEINFO* readF(FILE *wdOUTF, int *count, BASEINFO *tag) {
-	BASEINFO *storage, buf;
+	BASEINFO *storage = nullptr, buf;
 	int check;
 	rewind(wdOUTF);
 
@@ -387,7 +387,7 @@ BASEINFO* readF(FILE *wdOUTF, int *count, BASEINFO *tag) {
 
 //read transfer records and store into a dynamic structure array that is going to be returned
 TRANSFER* readF(FILE *transOUTF, int *count, TRANSFER *tag) {
-	TRANSFER *storage, buf;
+	TRANSFER *storage = nullptr, buf;
 	int check;
 	rewind(transOUTF);
 

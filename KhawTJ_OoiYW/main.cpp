@@ -43,7 +43,7 @@ int main() {
 		if (!mngerINF) throw - 12;
 
 		//initializing process
-		//read and store the data from the txt or dat files
+		//read and store the data from the text or data files
 		cust = readF(custINF, &custCount, cust);
 		mnger = readF(mngerINF, &mngerCount, mnger);
 
@@ -62,18 +62,18 @@ int main() {
 				currCust = nullptr;
 				printHeader("LOG-IN - CUSTOMER", "", 0);
 
-				//prompt for customer acc no.
+				//prompt for customer account no.
 				printf("\n\t 0 -> BACK\n\n  PLEASE ENTER YOUR ACC. NO. > ");
 				scanf(" %6[^\n]", accNo);
 				discard_junk();
 
-				//search for the acc no. in the customer list
+				//search for the account no. in the customer list
 				currCust = findAcc(cust, accNo, custCount, 0);
 
-				//if the acc is not found -> back
+				//if the account is not found -> back
 				if (currCust == nullptr) break;
 
-				//if the acc is locked -> quit
+				//if the account is locked -> quit
 				if (currCust->lock == 3) throw - 2;
 
 				//prompt for the pin no. for only 3 times : exit if the user used up 3 attempts
@@ -81,7 +81,7 @@ int main() {
 				strcpy(pinNo, readPassw(currCust));
 				if (strcmp("0", pinNo) == 0) break;
 
-				//prompt for new password if the acc is being logged in for the first time
+				//prompt for new password if the account is being logged in for the first time
 				if (currCust->lastTrans.yr == 0) {
 					strcpy(currCust->PIN, setPassw("WELCOME, THIS IS YOUR FIRST TIME TO LOG INTO YOUR BANK ACC.\n"
 						"  FOR SECURITY CONCERN, YOU ARE RECOMMENDED TO RESET YOUR PIN. NO.", 5, currCust, nullptr));
@@ -167,7 +167,7 @@ int main() {
 				//if it is not found -> back
 				if (currMnger == nullptr) break;
 
-				//prompt for password repeatly if incorrect password is detected
+				//prompt for password repeatedly if incorrect password is detected
 				printf("\n\tMANAGER/STAFF : %s\n\n  PLEASE KEY IN YOUR PASSWORD > ", currMnger->name);
 				strcpy(pinNo, readPassw(currMnger));
 				if (strcmp("0", pinNo) == 0) break;
@@ -228,7 +228,7 @@ int main() {
 							printf("\n\t1 -> UNLOCK ACCOUNT\n\t2 -> REGISTER FOR NEW CUSTOMER/STAFF\n\n\t  SELECT > ");
 							nSel = validIpt(-1, 2);
 							switch (nSel) {
-							case 1: //unlock acc
+							case 1: //unlock account
 								unlockAcc(cust, custCount);
 								break;
 							case 2: //registration
@@ -250,7 +250,7 @@ int main() {
 						confirmBreak(&chSel);
 						break;
 					}
-				} while (nSel != 0); //mnager menu ends
+				} while (nSel != 0); //manger menu ends
 				nSel = -2;
 				break;
 			case 0: //quit
@@ -260,7 +260,7 @@ int main() {
 		} while (1); //main menu ends
 	}
 
-	catch (int exception) { //once error or point of termination has triggered, the code below shall excecute immediately
+	catch (int exception) { //once error or point of termination has triggered, the code below shall execute immediately
 		//point to termination
 		if (exception == 0)
 			printExit("THANK YOU FOR CHOOSING US\n  HAVE A NICE DAY", "0");
@@ -280,7 +280,7 @@ int main() {
 		//runtime error
 		printError(exception);
 	}
-	catch (...) { //if any unknown error has occured
+	catch (...) { //if any unknown error has occurred
 		printExit("AN UNEXPECTED EXCEPTION OCCURRED", "n/a");
 	}
 

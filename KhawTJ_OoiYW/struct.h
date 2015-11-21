@@ -1,5 +1,5 @@
 #pragma once
-//struct
+//structure definition
 typedef struct {
 	int yr, mth, dy, hr, min, sec;
 }TIME;

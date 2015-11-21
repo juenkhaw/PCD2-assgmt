@@ -10,7 +10,7 @@ inline void discard_junk() {
 	while ((c = getchar()) != '\n'&&c != EOF);
 }
 
-//input validating fucntion--------------------------------------------------------
+//input validating function--------------------------------------------------------
 
 //accept, validate and return character input
 char validIpt(char* msg) {
@@ -78,12 +78,12 @@ void printTime() {
 	printf("%04d-%02d-%02d %02d:%02d:%02d\n", t.wYear, t.wMonth, t.wDay, t.wHour, t.wMinute, t.wSecond);
 }
 
-//print the time struct onto the console screen
+//print the time structure onto the console screen
 void printTime(TIME t) {
 	printf("%04d-%02d-%02d %02d:%02d:%02d", t.yr, t.mth, t.dy, t.hr, t.min, t.sec);
 }
 
-//set the system time into time struct (memory)
+//set the system time into time structure (memory)
 TIME setTime() {
 	TIME buf;
 	SYSTEMTIME t;
@@ -97,7 +97,7 @@ TIME setTime() {
 	return buf;
 }
 
-//print the header : leave name and atm empty if there is no deposit or withdrawal customer function
+//print the header : leave name and ATM empty if there is no deposit or withdrawal customer function
 void printHeader(char* dir, char *name, int nATM) {
 	system("cls");
 	printf("\n  TARBANK BANKING SYSTEM    ");
@@ -173,7 +173,7 @@ char* readPassw(MANAGER *currMnger) {
 	} while (1);
 }
 
-//read and set the password : set limit to 5 for pin. no. / 23 for passw
+//read and set the password : set limit to 5 for pin. no. / 23 for pass w
 char* setPassw(char* msg, int passwLength, CUSTOMER *currCust, MANAGER *currMnger) {
 	char passw[25], passw2[25], valid;
 	do {
@@ -231,7 +231,7 @@ char* setPassw(char* msg, int passwLength, CUSTOMER *currCust, MANAGER *currMnge
 				printf("\n  NEW PASSWORD MUST CONTAIN ONLY AT MOST 23 CHARACTERS\n  AND AT LEAST 6 CHARACTERS\n\n");
 		}
 
-		//if password and re-entred password do not match to each other
+		//if password and re-entered password do not match to each other
 		if (strcmp(passw, passw2) != 0) {
 			valid = false;
 			printf("\n  RE-ENTRED %s DID NOT MATCH WITH THE PREVIOUS ONE\n", (passwLength==5)?"PIN. NO.":"PASSWORD");
@@ -253,15 +253,15 @@ CUSTOMER *findAcc(CUSTOMER *cust, char *accNo, int custCount, int nATM) {
 	//the system will jump back to main menu if user key in "0"
 	if (strcmp(accNo, "0") == 0) return nullptr;
 
-	//check for the existance of the acc. no. entered by user
+	//check for the existence of the account no. entered by user
 	for (int i = 0; i < custCount; i++) {
 		if (strcmp(accNo, cust[i].accNo) == 0) {
-			//if the acc. no. entered by user does exist, the currCust ptr shall point to his acc.
+			//if the account no. entered by user does exist, the currCust pointer shall point to his account
 			return &cust[i];	
 		}
 	}
 
-	//if the acc. no. entered by user is not found, system shall prompt user for entering again
+	//if the account no. entered by user is not found, system shall prompt user for entering again
 	printHeader("ERROR - ACC. NOT FOUND", "", nATM);
 	printf("\n  THE ACC. NO. YOU HAD ENTERED WAS NOT FOUND/INVALID\n\n  ACC. NO. : %s\n\n  PLEASE TRY AGAIN\n", accNo);
 	readKey();
@@ -309,7 +309,7 @@ void printTime(FILE *buf) {
 	fprintf(buf, "%04d-%02d-%02d %02d:%02d:%02d", t.wYear, t.wMonth, t.wDay, t.wHour, t.wMinute, t.wSecond);
 }
 
-//read customer.txt and store into a struct array : parameter -> tag is just to differentiate the overloaded functions which read different files
+//read customer.txt and store into a structure array : parameter -> tag is just to differentiate the overloaded functions which read different files
 CUSTOMER* readF(FILE *custINF, int *custCount, CUSTOMER *tag) {
 	int check;
 	CUSTOMER *storage;
@@ -317,16 +317,16 @@ CUSTOMER* readF(FILE *custINF, int *custCount, CUSTOMER *tag) {
 	//compute the number of customers inside the "Customer.txt"
 	*custCount = countEntry(custINF);
 
-	//declare a dynamic allocated CUSTOMER struct array
+	//declare a dynamic allocated CUSTOMER structure array
 	storage = new CUSTOMER[*custCount];
 	for (int i = 0; i < *custCount; i++) {
 		check = 0;
 
-		//create struct pointer to replace customer[i] and customer[i].lastTrans
+		//create structure pointer to replace customer[i] and customer[i].lastTrans
 		CUSTOMER *tmp = &storage[i];
 		TIME *tmp2 = &storage[i].lastTrans;
 
-		//obtain the customers' details and store into "cust"
+		//obtain the customers' details and store into the structure
 		check = fscanf(custINF, "%[^|]|%[^|]|%[^_]%*[^|]|%c|%[^_]%*[^|]|%[^_]%*[^|]|%[^|]|%d|%lf %d-%d-%d %d:%d:%d\n",
 			tmp->accNo, tmp->PIN, tmp->name, &tmp->gender, tmp->adds, tmp->state, tmp->hp, &tmp->lock, &tmp->bal,
 			&tmp2->dy, &tmp2->mth, &tmp2->yr, &tmp2->hr, &tmp2->min, &tmp2->sec);
@@ -340,7 +340,7 @@ CUSTOMER* readF(FILE *custINF, int *custCount, CUSTOMER *tag) {
 	return storage;
 }
 
-//read manager.txt and store into a struct array : parameter -> tag is just to differentiate the overloaded functions which read different files
+//read manager.txt and store into a structure array : parameter -> tag is just to differentiate the overloaded functions which read different files
 MANAGER* readF(FILE *mngerINF, int *mngerCount, MANAGER *tag) {
 	int check;
 	MANAGER *storage;
@@ -348,15 +348,15 @@ MANAGER* readF(FILE *mngerINF, int *mngerCount, MANAGER *tag) {
 	//compute the number of customers inside the "Customer.txt"
 	*mngerCount = countEntry(mngerINF);
 
-	//declare a dynamic allocated CUSTOMER struct array
+	//declare a dynamic allocated CUSTOMER structure array
 	storage = new MANAGER[*mngerCount];
 	for (int i = 0; i < *mngerCount; i++) {
 		check = 0;
 
-		//create struct pointer to replace mnger[i]
+		//create structure pointer to replace mnger[i]
 		MANAGER *tmp = &storage[i];
 
-		//obtain the managers' details and store into "mnger"
+		//obtain the managers' details and store into the structure
 		check = fscanf(mngerINF, "%[^|]|%[^_]%*[^|]|%[^\n]\n", tmp->ID, tmp->passw, tmp->name);
 		//printf("%s\n%s\n%s\n\n", tmp->ID, tmp->passw, tmp->name);
 
@@ -366,13 +366,13 @@ MANAGER* readF(FILE *mngerINF, int *mngerCount, MANAGER *tag) {
 	return storage;
 }
 
-//read withdrawal records and store into a dynamic struct array that is going to be returned
+//read withdrawal records and store into a dynamic structure array that is going to be returned
 BASEINFO* readF(FILE *wdOUTF, int *count, BASEINFO *tag) {
 	BASEINFO *storage, buf;
 	int check;
 	rewind(wdOUTF);
 
-	//compute the number of entry and store it on a dynamic struct array
+	//compute the number of entry and store it on a dynamic structure array
 	while (fread(&buf, sizeof(BASEINFO), 1, wdOUTF) != 0)
 		(*count)++;
 	rewind(wdOUTF);
@@ -385,13 +385,13 @@ BASEINFO* readF(FILE *wdOUTF, int *count, BASEINFO *tag) {
 	return storage;
 }
 
-//read transfer records and store into a dynamic struct array that is going to be returned
+//read transfer records and store into a dynamic structure array that is going to be returned
 TRANSFER* readF(FILE *transOUTF, int *count, TRANSFER *tag) {
 	TRANSFER *storage, buf;
 	int check;
 	rewind(transOUTF);
 
-	//compute the number of entry and store it on a dynamic struct array
+	//compute the number of entry and store it on a dynamic structure array
 	while (fread(&buf, sizeof(TRANSFER), 1, transOUTF) != 0)
 		(*count)++;
 	rewind(transOUTF);
@@ -408,7 +408,7 @@ void writeF(FILE *custINF, CUSTOMER *cust, int custCount) {
 	rewind(custINF);
 	for (int i = 0; i < custCount; i++) {
 
-		//create temporary pointer for address of struct below
+		//create temporary pointer for address of structure below
 		CUSTOMER *tmp = &cust[i];
 		TIME *tmp2 = &cust[i].lastTrans;
 

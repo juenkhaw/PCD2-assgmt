@@ -268,28 +268,33 @@ int main() {
 
 	catch (int exception) { //once error or point of termination has triggered, the code below shall execute immediately
 		//point to termination
+		//normal termination
 		if (exception == 0)
 			printExit("THANK YOU FOR CHOOSING US\n  HAVE A NICE DAY", "0");
+		//user has successfully reset his/her password or pin. no.
 		if (exception == 1) {
 			printExit("PIN. NO. HAS BEEN SUCCESFULLY RESET", "1");
 			printf("\n  PLEASE RESTART THE SYSTEM IN ORDER TO LOG INTO YOUR BANK ACC.\n\n\t  ACC. NO. : %s\n\n", accNo);
 		}
+		//user has failed to log into his/her account
 		if (exception == -1) {
 			printExit("SORRY, YOU HAVE FAILED TO LOG INTO THE ACC. WITHIN 3 ATTEMPTS", "-1");
 			printf("\n  THE ACC. BELOW HAS BEEN LOCKED DUE TO SECURITY CONCERN\n\n\t  ACC. NO. : %s\n\n"
 				"  PLEASE CONTACT A QUALIFIED MANAGER/STAFF IN ORDER TO UNLOCK THE ACC. ABOVE\n\n", accNo);
 		}
+		//user has tried to log into his/her locked account that has not yet been unlocked
 		if (exception == -2) {
 			printExit("YOUR ACC. IS LOCKED DUE TO SECURITY CONCERN", "-2");
 			printf("\n  PLEASE CONTACT A QUALIFIED MANAGER/STAFF IN ORDER TO UNLOCK YOUR ACC.\n\n");
 		}
-		//runtime error
+		//check for runtime error
 		printError(exception);
 	}
 	catch (...) { //if any unknown error has occurred
 		printExit("AN UNEXPECTED EXCEPTION OCCURRED", "n/a");
 	}
 
+	//update the latest data into the files respectively
 	writeF(test, cust, custCount);
 	writeF(custINF, cust, custCount);
 	writeF(test2, mnger, mngerCount);

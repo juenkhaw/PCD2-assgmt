@@ -6,6 +6,7 @@
 
 //replace fflush(stdin)
 inline void discard_junk() {
+	//grab all the chars that are remained inside the buffer
 	char c;
 	while ((c = getchar()) != '\n'&&c != EOF);
 }
@@ -18,11 +19,14 @@ char validIpt(char* msg) {
 	int check;
 	printf("\n  %s (Y = Yes, N = No) > ", msg);
 	do {
+		//reset the value
 		sel = c[0] = '\0';
 		check = scanf(" %c%1[^\n]", &sel, c);
 
 		//remove the junk inside the input buffer
 		(check != 1) ? discard_junk() : 0;
+
+		//continue if the char input is not 'N', 'Y' and invalid
 	} while ((toupper(sel) != 'N'&&toupper(sel) != 'Y' || check != 1) && printf("\n  INVALID INPUT DETECTED\n  PLEASE TRY AGAIN > "));
 
 	discard_junk();
@@ -35,11 +39,14 @@ int validIpt(int lwrLimit, int uprLimit) {
 	int ipt, check;
 	char c;
 	do {
+		//reset the value
 		c = '\0';
 		check = scanf("%d%c", &ipt, &c);
 
 		//remove the junk inside the input buffer
 		(check != 2 || c != '\n') ? discard_junk() : 0;
+
+		//continue if the int input is not within the range specified and invalid
 	} while ((check != 2 || c != '\n' || ipt < lwrLimit || ipt > uprLimit) && printf("\n  INVALID INPUT DETECTED\n  PLEASE TRY AGAIN > "));
 
 	//return the valid int input
@@ -52,11 +59,14 @@ double validIpt() {
 	int check;
 	char c;
 	do {
+		//reset the value
 		c = '\0';
 		check = scanf("%lf%c", &ipt, &c);
 
 		//remove the junk inside the input buffer
 		(check != 2 || c != '\n') ? discard_junk() : 0;
+
+		//continue if the double input is invalid
 	} while ((check != 2 || c != '\n') && printf("\n  INVALID INPUT DETECTED\n  PLEASE TRY AGAIN > "));
 
 	//return the valid double input
@@ -65,7 +75,7 @@ double validIpt() {
 
 //main menu functions----------------------------------------------------------
 
-//sustain the screen from being clear
+//sustain the screen from being cleared
 void readKey() {
 	printf("\n  PRESS ANY KEY TO CONTINUE...\n");
 	system("pause>nul");
@@ -139,6 +149,8 @@ int randomATM(int nSel) {
 void confirmBreak(char *chSel) {
 	*chSel = 'N';
 	*chSel = validIpt("TERMINATE THE CURRENT PROCESS AND QUIT?");
+
+	//throw 0 to jump out from the main processing loop directly
 	if (*chSel == 'Y') throw 0;
 }
 
@@ -148,10 +160,14 @@ void confirmBreak(char *chSel) {
 char* readPassw(CUSTOMER *currCust) {
 	char passw[7];
 	do {
+		//reset the value
 		passw[0] = '\0';
 		scanf(" %6[^\n]", passw);
+		//if user tried to back, return 0
 		if (strcmp("0", passw) == 0) return "0";
+		//if the pin. no. is matched and valid, return it
 		if (strcmp(currCust->PIN, passw) == 0) return passw;
+		//else the user will be warned about the attempts left for him/her to try again
 		else {
 			currCust->lock++;
 			if (currCust->lock == 3) throw - 1;
@@ -164,10 +180,14 @@ char* readPassw(CUSTOMER *currCust) {
 char* readPassw(MANAGER *currMnger) {
 	char passw[25];
 	do {
+		//reset the value
 		passw[0] = '\0';
 		scanf(" %24[^\n]", passw);
+		//if user tried to back, return 0
 		if (strcmp("0", passw) == 0) return "0";
+		//if the password is matched and valid, return it
 		if (strcmp(currMnger->passw, passw) == 0) return passw;
+		//else the user will be prompted for trying again
 		else
 			printf("\n  INVALID PASSWORD - PLEASE TRY AGAIN > ");
 	} while (1);
@@ -177,10 +197,13 @@ char* readPassw(MANAGER *currMnger) {
 char* setPassw(char* msg, int passwLength, CUSTOMER *currCust, MANAGER *currMnger) {
 	char passw[25], passw2[25], valid;
 	do {
+		//reset the value
 		passw[0] = passw2[0] = '\0';
 		valid = true;
+
 		if (passwLength == 5) printHeader("RESET PIN. NO.", "",  0);
 		else printHeader("RESET PASSWORD", "",  0);
+
 		//prompt user to enter and re-enter new password
 		if (passwLength == 5)
 			printf("\n  %s\n\n\t  ACC. NO. : %s\n\n  NEW PIN. NO. > ", msg, currCust->accNo);
@@ -253,7 +276,7 @@ CUSTOMER *findAcc(CUSTOMER *cust, char *accNo, int custCount, int nATM) {
 	//the system will jump back to main menu if user key in "0"
 	if (strcmp(accNo, "0") == 0) return nullptr;
 
-	//check for the existence of the account no. entered by user
+	//check for the existence of the account no. entered by the user
 	for (int i = 0; i < custCount; i++) {
 		if (strcmp(accNo, cust[i].accNo) == 0) {
 			//if the account no. entered by user does exist, the currCust pointer shall point to his account
@@ -261,7 +284,7 @@ CUSTOMER *findAcc(CUSTOMER *cust, char *accNo, int custCount, int nATM) {
 		}
 	}
 
-	//if the account no. entered by user is not found, system shall prompt user for entering again
+	//if the account no. entered by the user is not found, system will prompt the user for entering again
 	printHeader("ERROR - ACC. NOT FOUND", "", nATM);
 	printf("\n  THE ACC. NO. YOU HAD ENTERED WAS NOT FOUND/INVALID\n\n  ACC. NO. : %s\n\n  PLEASE TRY AGAIN\n", accNo);
 	readKey();
@@ -271,13 +294,19 @@ CUSTOMER *findAcc(CUSTOMER *cust, char *accNo, int custCount, int nATM) {
 //seek for a manager from the manager list
 MANAGER *findAcc(MANAGER *mnger, char *id, int mngerCount) {
 	MANAGER *currMnger = nullptr;
+
+	//jump back to the main menu if user key in "0"
 	if (strcmp(id, "0") == 0) return nullptr;
+
+	//check for the existence of the id. no. entered by the user
 	for (int i = 0; i < mngerCount; i++) {
 		if (strcmp(id, mnger[i].ID) == 0) {
 			currMnger = &mnger[i];
 			break;
 		}
 	}
+
+	//if the id. no. entered by the user is not found, system will prompt the user for entering again
 	if (currMnger == nullptr) {
 		printHeader("ERROR - ID. NOT FOUND", "", 0);
 		printf("\n  THE ID. NO. YOU HAD ENTERED WAS NOT FOUND/INVALID\n\n  ID. NO. : %s\n\n  PLEASE TRY AGAIN\n", id);
@@ -363,6 +392,7 @@ MANAGER* readF(FILE *mngerINF, int *mngerCount, MANAGER *tag) {
 		//if there is possible lost data, return the error code
 		if (check != 3) throw - 14;
 	}
+	//return the dynamic structure array with data
 	return storage;
 }
 
@@ -376,12 +406,16 @@ BASEINFO* readF(FILE *wdOUTF, int *count, BASEINFO *tag) {
 	while (fread(&buf, sizeof(BASEINFO), 1, wdOUTF) != 0)
 		(*count)++;
 	rewind(wdOUTF);
+
+	//create a temporary dynamic structure array to store the deposit/withdrawal info
 	storage = new BASEINFO[*count];
 	for (int i = 0; i < *count; i++) {
 		check = fread(&storage[i], sizeof(BASEINFO), 1, wdOUTF);
+
+		//if there is possible lost of data occurred
 		if (check != 1) throw - 15;
 	}
-
+	//return the dynamic structure array with info
 	return storage;
 }
 
@@ -395,11 +429,16 @@ TRANSFER* readF(FILE *transOUTF, int *count, TRANSFER *tag) {
 	while (fread(&buf, sizeof(TRANSFER), 1, transOUTF) != 0)
 		(*count)++;
 	rewind(transOUTF);
+
+	//create a temporary dynamic structure array to store the transfers info
 	storage = new TRANSFER[*count];
 	for (int i = 0; i < *count; i++) {
 		check = fread(&storage[i], sizeof(TRANSFER), 1, transOUTF);
+		
+		//if there is possible lost of data occurred
 		if (check != 1) throw - 16;
 	}
+	//return the dynamic structure array with data
 	return storage;
 }
 

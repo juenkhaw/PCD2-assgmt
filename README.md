@@ -20,7 +20,7 @@ BASIC
 
 ADDITIONAL
 - <s>Change password</s>
-- Check the bank balance, total deposit and withdrawal etc.
+- <s>Check the bank balance</s>
 - Account transaction drill down report
 
 <h3><strong>Manager Functions</strong></h3>

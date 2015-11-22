@@ -53,6 +53,8 @@ int main() {
 			nSel = 0;
 			accNo[0] = pinNo[0] = '\0';
 			printHeader("MAIN MENU", "", 0);
+			printf("\n  WARNING\n  -------\n  PLEASE TERMINATE THE PROGRAM PROPERLY BY FOLLOWING THE INSTRUCTION GIVEN\n"
+				"  OTHERWISE, DATA SUCH AS RECENT CHANGED DETAILS OR TRANSACTIONS MIGHT BE LOST\n");
 			printf("\n\t0 -> EXIT\n\n\t1 -> CUSTOMER MENU\n\t2 -> MANAGER MENU\n\n\tSELECT > ");
 			nSel = validIpt(0, 2);
 			switch (nSel) {
@@ -106,6 +108,7 @@ int main() {
 								cash_dpFunc(cashdp, currCust, nATM);
 								break;
 							case 2: //cheque deposits
+								cheque_dpFunc(chequedp, currCust, nATM);
 								break;
 							case 0: //back
 								break;
@@ -278,7 +281,7 @@ int main() {
 		}
 		if (exception == -2) {
 			printExit("YOUR ACC. IS LOCKED DUE TO SECURITY CONCERN", "-2");
-			printf("\n  PLEASE CONTACT A QUALIFIED MANAGER/STAFF IN ORDER TO UNLOCK YOUR ACC.\n\n\t  <SYSTEM TERMINATED>\n");
+			printf("\n  PLEASE CONTACT A QUALIFIED MANAGER/STAFF IN ORDER TO UNLOCK YOUR ACC.\n\n");
 		}
 		//runtime error
 		printError(exception);
@@ -288,9 +291,9 @@ int main() {
 	}
 
 	writeF(test, cust, custCount);
-	//writeF(custINF, cust, custCount);
+	writeF(custINF, cust, custCount);
 	writeF(test2, mnger, mngerCount);
-	//writeF(mngerINF, mnger, mngerCount);
+	writeF(mngerINF, mnger, mngerCount);
 
 	printf("\t\t<SYSTEM TERMINATED>\n\n");
 

@@ -36,7 +36,7 @@ BASIC
 
 ADDITIONAL
 - <s>Unlock the locked account</s>
-- <s>Register for customer</s
+- <s>Register for customer</s>
 - <s>Change password</s>
 
 <h3><strong>Design</strong></h3>

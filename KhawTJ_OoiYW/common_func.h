@@ -27,7 +27,7 @@ char validIpt(char* msg) {
 		(check != 1) ? discard_junk() : 0;
 
 		//continue if the char input is not 'N', 'Y' and invalid
-	} while ((toupper(sel) != 'N'&&toupper(sel) != 'Y' || check != 1) && printf("\n  INVALID INPUT DETECTED\n  PLEASE TRY AGAIN > "));
+	} while ((toupper(sel) != 'Y'&&toupper(sel) != 'N' || check != 1) && printf("\n  INVALID INPUT DETECTED\n  PLEASE TRY AGAIN > "));
 
 	discard_junk();
 	//return the validated char input

@@ -36,7 +36,7 @@ int main() {
 
 	try { //start to seek for the runtime error and point to terminate the system
 
-		//check whether the files have opened or not
+		  //check whether the files have opened or not
 		custINF = fopen("Customer.txt", "r+");
 		if (!custINF) throw - 11;
 		mngerINF = fopen("Manager.txt", "r");
@@ -60,7 +60,7 @@ int main() {
 			switch (nSel) {
 			case 1: //customer menu
 
-				//log in function for customer
+					//log in function for customer
 				currCust = nullptr;
 				printHeader("LOG-IN - CUSTOMER", "", 0);
 
@@ -159,7 +159,7 @@ int main() {
 				break;
 			case 2://manager menu
 
-				//log in function for manager
+				   //log in function for manager
 				currMnger = nullptr;
 				printHeader("LOG IN - MANAGER", "", 0);
 
@@ -238,6 +238,8 @@ int main() {
 								unlockAcc(cust, custCount);
 								break;
 							case 2: //registration
+								registerUser(custINF, cust, custCount);
+								break;
 							case 0: //back
 								break;
 							case -1: //quit
@@ -267,14 +269,19 @@ int main() {
 	}
 
 	catch (int exception) { //once error or point of termination has triggered, the code below shall execute immediately
-		//point to termination
+		//point to termination :-
 		//normal termination
 		if (exception == 0)
 			printExit("THANK YOU FOR CHOOSING US\n  HAVE A NICE DAY", "0");
 		//user has successfully reset his/her password or pin. no.
 		if (exception == 1) {
 			printExit("PIN. NO. HAS BEEN SUCCESFULLY RESET", "1");
-			printf("\n  PLEASE RESTART THE SYSTEM IN ORDER TO LOG INTO YOUR BANK ACC.\n\n\t  ACC. NO. : %s\n\n", accNo);
+			printf("\n  PLEASE RESTART THE SYSTEM IN ORDER TO LOG IN AGAIN");
+		}
+		//user has successfully registered for a new customer
+		if (exception == 2) {
+			printExit("CUSTOMER'S ACCOUNT HAS BEEN SUCCESSFULLY CREATED", "2");
+			printf("\n  PLEASE RESTART THE SYSTEM IN ORDER TO UPDATE THE CUSTOMER LIST\n");
 		}
 		//user has failed to log into his/her account
 		if (exception == -1) {
@@ -287,8 +294,8 @@ int main() {
 			printExit("YOUR ACC. IS LOCKED DUE TO SECURITY CONCERN", "-2");
 			printf("\n  PLEASE CONTACT A QUALIFIED MANAGER/STAFF IN ORDER TO UNLOCK YOUR ACC.\n\n");
 		}
-		//check for runtime error
-		printError(exception);
+		else		//check for runtime error
+			printError(exception);
 	}
 	catch (...) { //if any unknown error has occurred
 		printExit("AN UNEXPECTED EXCEPTION OCCURRED", "n/a");
@@ -315,6 +322,6 @@ int main() {
 	fclose(chequedp);
 	fclose(test);
 	fclose(test2);
-	
+
 	return 0;
 }

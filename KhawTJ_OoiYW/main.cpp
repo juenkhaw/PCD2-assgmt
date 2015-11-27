@@ -60,7 +60,7 @@ int main() {
 			switch (nSel) {
 			case 1: //customer menu
 
-					//log in function for customer
+				//log in function for customer
 				currCust = nullptr;
 				printHeader("LOG-IN - CUSTOMER", "", 0);
 
@@ -231,7 +231,7 @@ int main() {
 						do { //accounts management starts
 							printHeader("MAIN MENU > MANAGER MENU > ACCOUNTS MANAGEMENT", currMnger->name, 0);
 							printBreak();
-							printf("\n\t1 -> UNLOCK ACCOUNT\n\t2 -> REGISTER FOR NEW CUSTOMER/STAFF\n\n\t  SELECT > ");
+							printf("\n\t1 -> UNLOCK ACCOUNT\n\t2 -> REGISTER FOR NEW CUSTOMER\n\n\t  SELECT > ");
 							nSel = validIpt(-1, 2);
 							switch (nSel) {
 							case 1: //unlock account
@@ -307,7 +307,7 @@ int main() {
 	writeF(test2, mnger, mngerCount);
 	writeF(mngerINF, mnger, mngerCount);
 
-	printf("\t\t<SYSTEM TERMINATED>\n\n");
+	printf("\n\n\t\t<SYSTEM TERMINATED>\n\n");
 
 	//free the memory
 	delete[] cust;

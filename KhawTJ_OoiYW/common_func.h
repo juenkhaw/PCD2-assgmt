@@ -1,6 +1,8 @@
 #include <time.h>
 #include <string.h>
 #include <ctype.h>
+#include <sstream>
+#include <iostream>
 
 #include "struct.h"
 
@@ -9,6 +11,32 @@ inline void discard_junk() {
 	//grab all the chars that are remained inside the buffer
 	char c;
 	while ((c = getchar()) != '\n'&&c != EOF);
+}
+
+using namespace std;
+
+//functions with templates are served as a pattern for creating other similar functions to avoid duplication and numerous of overloaded functions
+
+//accept any datatype of values and return it as a form of C-style string
+template<typename T>
+inline const char* toString(T tX) {
+	//stream is set up to accept a variety of sources input
+	ostringstream os;
+	os << tX;
+	//convert the buffer into string
+	string buf = os.str();
+	//return as a C-style string
+	return buf.c_str();
+}
+
+//accept any datatype of values and return true if the user wished to back
+template<typename T>
+inline bool confirmBack(T tX) {
+	ostringstream os;
+	os << tX;
+	string buf = os.str();
+	//return true if the user wished to back by key in "0"
+	return (buf.compare("0") == 0) ? true : false;
 }
 
 //input validating function--------------------------------------------------------
@@ -456,7 +484,7 @@ void writeF(FILE *custINF, CUSTOMER *cust, int custCount) {
 			tmp->lock = 0;
 
 		//update the data into the destination file
-		fprintf(custINF, "%5s|%5s|%-36s|%c|%-29s|%-14s|%s|%d|%09.2lf %02d-%02d-%04d %02d:%02d:%02d\n",
+		fprintf(custINF, "%5s|%5s|%-36s|%c|%-29s|%-14s|%s|%d|%010.2lf %02d-%02d-%04d %02d:%02d:%02d\n",
 			tmp->accNo, tmp->PIN, strcat(tmp->name, "_"), tmp->gender, strcat(tmp->adds, "_"), strcat(tmp->state, "_"), tmp->hp, tmp->lock, tmp->bal,
 			tmp2->dy, tmp2->mth, tmp2->yr, tmp2->hr, tmp2->min, tmp2->sec);
 	}

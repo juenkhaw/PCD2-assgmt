@@ -217,7 +217,10 @@ int main() {
 							nSel = validIpt(-1, 2);
 							switch (nSel) {
 							case 1: //cheque clearings
+								break;
 							case 2: //high withdrawals alert
+								wdAlert(cust, custCount, wdOUTF, transOUTF);
+								break;
 							case 0: //back
 								break;
 							case -1: //quit
@@ -307,7 +310,7 @@ int main() {
 	writeF(test2, mnger, mngerCount);
 	writeF(mngerINF, mnger, mngerCount);
 
-	printf("\n\n\t\t<SYSTEM TERMINATED>\n\n");
+	printf("\n\n------------------------------<SYSTEM TERMINATED>------------------------------\n\n");
 
 	//free the memory
 	delete[] cust;

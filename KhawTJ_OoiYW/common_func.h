@@ -359,11 +359,16 @@ int countEntry(FILE *buf) {
 	return count;
 }
 
-//print the time on a file with a fixed format
+//print the current time on a file with a fixed format
 void printTime(FILE *buf) {
 	SYSTEMTIME t;
 	GetLocalTime(&t);
 	fprintf(buf, "%04d-%02d-%02d %02d:%02d:%02d", t.wYear, t.wMonth, t.wDay, t.wHour, t.wMinute, t.wSecond);
+}
+
+//print the selected time structure on a file with a fixed format
+void printTime(FILE *buf, TIME t) {
+	fprintf(buf, "%04d-%02d-%02d %02d:%02d:%02d", t.yr, t.mth, t.dy, t.hr, t.min, t.sec);
 }
 
 //read customer.txt and store into a structure array : parameter -> tag is just to differentiate the overloaded functions which read different files

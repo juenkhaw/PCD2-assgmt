@@ -99,7 +99,7 @@ int main() {
 					switch (nSel) {
 					case 1: //deposit subsystem
 						do {
-							nATM = randomATM(nSel);
+							nATM = randomATM(1);
 							printHeader("MAIN MENU > CUSTOMER MENU > DEPOSITS SUBSYSTEM", currCust->name, nATM);
 							printBreak();
 							printf("\n\t1 -> CASH DEPOSITS\n\t2 -> CHEQUE DEPOSITS\n\n\t  SELECT > ");
@@ -121,7 +121,7 @@ int main() {
 						nSel = -2;
 						break;
 					case 2: //withdrawal subsystem
-						nATM = randomATM(nSel);
+						nATM = randomATM(2);
 						do { //withdrawal subsystem starts
 							printHeader("MAIN MENU > CUSTOMER MENU > WITHDRAWALS/TRANSFERS SUBSYSTEM", currCust->name, nATM);
 							printBreak();

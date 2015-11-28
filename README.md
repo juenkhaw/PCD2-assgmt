@@ -32,7 +32,7 @@ BASIC
 - <s>Withdrawal log</s>
 - <s>Funds transfer log</s>
 - Cheque clearing
-- High withdrawals alert
+- <s>High withdrawals alert</s>
 
 ADDITIONAL
 - <s>Unlock the locked account</s>

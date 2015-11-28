@@ -90,6 +90,7 @@ int main() {
 					currCust->lastTrans = setTime();
 					throw 1;
 				}
+				currCust->lastTrans = setTime();
 				do { //customer menu starts
 					printHeader("MAIN MENU > CUSTOMER MENU", currCust->name, 0);
 					printBreak();
@@ -192,7 +193,10 @@ int main() {
 							nSel = validIpt(-1, 4);
 							switch (nSel) {
 							case 1: //cash deposit log
+								cash_log(cashdp);
+								break;
 							case 2: //cheque deposit log
+								cheque_log(chequedp);
 								break;
 							case 3: //withdrawal log
 								printWdLog(wdOUTF);

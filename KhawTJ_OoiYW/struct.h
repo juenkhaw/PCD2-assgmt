@@ -31,8 +31,9 @@ typedef struct {
 //structure for cheque deposits' details
 typedef struct {
 	BASEINFO base;
-	char bankCode[9];
-	int cheqNo;
+	char bankCode[10];
+	char cheqNo[7];
+	int check;
 }CHEQUE;
 
 //structure for transfer's details

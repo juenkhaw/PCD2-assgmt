@@ -470,6 +470,29 @@ TRANSFER* readF(FILE *transOUTF, int *count, TRANSFER *tag) {
 	return storage;
 }
 
+//read cheque records and store into a dynamic structure array that is going to be returned
+CHEQUE* readF(FILE *chequedp, int *count, CHEQUE *tag) {
+	CHEQUE *storage = nullptr, buf;
+	int check;
+	rewind(chequedp);
+
+	//compute the number of entry and store it on a dynamic structure array
+	while (fread(&buf, sizeof(CHEQUE), 1, chequedp) != 0)
+		(*count)++;
+	rewind(chequedp);
+
+	//create a temporary dynamic structure array to store the deposit/withdrawal info
+	storage = new CHEQUE[*count];
+	for (int i = 0; i < *count; i++) {
+		check = fread(&storage[i], sizeof(CHEQUE), 1, chequedp);
+
+		//if there is possible lost of data occurred
+		if (check != 1) throw - 17;
+	}
+	//return the dynamic structure array with info
+	return storage;
+}
+
 //write and update customer.txt
 void writeF(FILE *custINF, CUSTOMER *cust, int custCount) {
 	rewind(custINF);

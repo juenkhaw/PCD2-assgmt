@@ -21,14 +21,14 @@ BASIC
 ADDITIONAL
 - <s>Change password</s>
 - <s>Check the bank balance</s>
-- Account transaction drill down report
+- <s>Account transaction drill down report</s>
 
 <h3><strong>Manager Functions</strong></h3>
 
 BASIC
 
-- Cash deposit log
-- Cheque deposit log
+- <s>Cash deposit log</s>
+- <s>Cheque deposit log</s>
 - <s>Withdrawal log</s>
 - <s>Funds transfer log</s>
 - Cheque clearing
@@ -38,8 +38,3 @@ ADDITIONAL
 - <s>Unlock the locked account</s>
 - <s>Register for customer</s>
 - <s>Change password</s>
-
-<h3><strong>Design</strong></h3>
-- printHeader()
-- printExit()
-- Other adjustment etc.

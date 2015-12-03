@@ -303,7 +303,7 @@ char* setPassw(char* msg, int passwLength, CUSTOMER *currCust, MANAGER *currMnge
 CUSTOMER *findAcc(CUSTOMER *cust, char *accNo, int custCount, int nATM) {
 	//the system will jump back to main menu if user key in "0"
 	if (strcmp(accNo, "0") == 0) return nullptr;
-
+	
 	//check for the existence of the account no. entered by the user
 	for (int i = 0; i < custCount; i++) {
 		if (strcmp(accNo, cust[i].accNo) == 0) {

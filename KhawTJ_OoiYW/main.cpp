@@ -54,7 +54,7 @@ int main() {
 			accNo[0] = pinNo[0] = '\0';
 			printHeader("MAIN MENU", "", 0);
 			printf("\n  WARNING\n  -------\n  PLEASE TERMINATE THE PROGRAM PROPERLY BY FOLLOWING THE INSTRUCTION GIVEN\n"
-				"  OTHERWISE, DATA SUCH AS RECENT CHANGED DETAILS OR TRANSACTIONS MIGHT BE LOST\n");
+				"  OTHERWISE, DATA SUCH AS RECENTLY CHANGED DETAILS OR TRANSACTIONS MIGHT BE LOST\n");
 			printf("\n\t0 -> EXIT\n\n\t1 -> CUSTOMER MENU\n\t2 -> MANAGER MENU\n\n\tSELECT > ");
 			nSel = validIpt(0, 2);
 			switch (nSel) {
@@ -221,6 +221,7 @@ int main() {
 							nSel = validIpt(-1, 2);
 							switch (nSel) {
 							case 1: //cheque clearings
+								//cheque_clear(chequedp, cust, custCount);
 								break;
 							case 2: //high withdrawals alert
 								wdAlert(cust, custCount, wdOUTF, transOUTF);

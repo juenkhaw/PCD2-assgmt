@@ -221,7 +221,7 @@ int main() {
 							nSel = validIpt(-1, 2);
 							switch (nSel) {
 							case 1: //cheque clearings
-								//cheque_clear(chequedp, cust, custCount);
+								cheque_clear(chequedp, cust, custCount);
 								break;
 							case 2: //high withdrawals alert
 								wdAlert(cust, custCount, wdOUTF, transOUTF);

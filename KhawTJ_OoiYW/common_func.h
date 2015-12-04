@@ -45,8 +45,8 @@ inline bool confirmBack(T tX) {
 char validIpt(char* msg) {
 	char sel, c[2];
 	int check;
-	printf("\n  %s (Y = Yes, N = No) > ", msg);
 	do {
+		printf("\n  %s (Y = Yes, N = No) > ", msg);
 		//reset the value
 		sel = c[0] = '\0';
 		check = scanf(" %c%1[^\n]", &sel, c);
@@ -55,7 +55,7 @@ char validIpt(char* msg) {
 		(check != 1) ? discard_junk() : 0;
 
 		//continue if the char input is not 'N', 'Y' and invalid
-	} while ((toupper(sel) != 'Y'&&toupper(sel) != 'N' || check != 1) && printf("\n  INVALID INPUT DETECTED\n  PLEASE TRY AGAIN > "));
+	} while ((toupper(sel) != 'Y'&&toupper(sel) != 'N' || check != 1) && printf("\n  INVALID INPUT DETECTED"));
 
 	discard_junk();
 	//return the validated char input
@@ -63,10 +63,11 @@ char validIpt(char* msg) {
 }
 
 //accept, validate and return integer input
-int validIpt(int lwrLimit, int uprLimit) {
+int validIpt(char *msg, int lwrLimit, int uprLimit) {
 	int ipt, check;
 	char c;
 	do {
+		printf("  %s > ", msg);
 		//reset the value
 		c = '\0';
 		check = scanf("%d%c", &ipt, &c);
@@ -75,7 +76,7 @@ int validIpt(int lwrLimit, int uprLimit) {
 		(check != 2 || c != '\n') ? discard_junk() : 0;
 
 		//continue if the int input is not within the range specified and invalid
-	} while ((check != 2 || c != '\n' || ipt < lwrLimit || ipt > uprLimit) && printf("\n  INVALID INPUT DETECTED\n  PLEASE TRY AGAIN > "));
+	} while ((check != 2 || c != '\n' || ipt < lwrLimit || ipt > uprLimit) && printf("\n  INVALID INPUT DETECTED\n"));
 
 	//return the valid int input
 	return ipt;

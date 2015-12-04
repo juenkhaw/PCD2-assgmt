@@ -39,7 +39,7 @@ int main() {
 		  //check whether the files have opened or not
 		custINF = fopen("Customer.txt", "r+");
 		if (!custINF) throw - 11;
-		mngerINF = fopen("Manager.txt", "r");
+		mngerINF = fopen("Manager.txt", "r+");
 		if (!mngerINF) throw - 12;
 
 		//initializing process
@@ -55,8 +55,8 @@ int main() {
 			printHeader("MAIN MENU", "", 0);
 			printf("\n  WARNING\n  -------\n  PLEASE TERMINATE THE PROGRAM PROPERLY BY FOLLOWING THE INSTRUCTION GIVEN\n"
 				"  OTHERWISE, DATA SUCH AS RECENTLY CHANGED DETAILS OR TRANSACTIONS MIGHT BE LOST\n");
-			printf("\n\t0 -> EXIT\n\n\t1 -> CUSTOMER MENU\n\t2 -> MANAGER MENU\n\n\tSELECT > ");
-			nSel = validIpt(0, 2);
+			printf("\n\t0 -> EXIT\n\n\t1 -> CUSTOMER MENU\n\t2 -> MANAGER MENU\n\n");
+			nSel = validIpt("\tSELECT", 0, 2);
 			switch (nSel) {
 			case 1: //customer menu
 
@@ -94,16 +94,16 @@ int main() {
 				do { //customer menu starts
 					printHeader("MAIN MENU > CUSTOMER MENU", currCust->name, 0);
 					printBreak();
-					printf("\n\t1 -> DEPOSITS\n\t2 -> WITHDRAWALS/TRANSFERS\n\t3 -> CHECK ACCOUNT BALANCE\n\t4 -> CHANGE PIN. NO.\n\n\t  SELECT > ");
-					nSel = validIpt(-1, 4);
+					printf("\n\t1 -> DEPOSITS\n\t2 -> WITHDRAWALS/TRANSFERS\n\t3 -> CHECK ACCOUNT BALANCE\n\t4 -> CHANGE PIN. NO.\n\n");
+					nSel = validIpt("\tSELECT", -1, 4);
 					switch (nSel) {
 					case 1: //deposit subsystem
 						do {
 							nATM = randomATM(1);
 							printHeader("MAIN MENU > CUSTOMER MENU > DEPOSITS SUBSYSTEM", currCust->name, nATM);
 							printBreak();
-							printf("\n\t1 -> CASH DEPOSITS\n\t2 -> CHEQUE DEPOSITS\n\n\t  SELECT > ");
-							nSel = validIpt(-1, 2);
+							printf("\n\t1 -> CASH DEPOSITS\n\t2 -> CHEQUE DEPOSITS\n\n");
+							nSel = validIpt("\tSELECT", -1, 2);
 							switch (nSel) { //deposits subsystem starts
 							case 1: //cash deposits
 								cash_dpFunc(cashdp, currCust, nATM);
@@ -125,8 +125,8 @@ int main() {
 						do { //withdrawal subsystem starts
 							printHeader("MAIN MENU > CUSTOMER MENU > WITHDRAWALS/TRANSFERS SUBSYSTEM", currCust->name, nATM);
 							printBreak();
-							printf("\n\t1 -> CASH WITHDRAWAL\n\t2 -> CASH/FUNDS TRANSFER\n\n\t  SELECT > ");
-							nSel = validIpt(-1, 2);
+							printf("\n\t1 -> CASH WITHDRAWAL\n\t2 -> CASH/FUNDS TRANSFER\n\n");
+							nSel = validIpt("\tSELECT", -1, 2);
 							switch (nSel) {
 							case 1: //cash withdrawal
 								wdFunc(wdOUTF, currCust, nATM);
@@ -182,15 +182,15 @@ int main() {
 				do { //manager menu starts
 					printHeader("MAIN MENU > MANAGER MENU", currMnger->name, 0);
 					printBreak();
-					printf("\n\t1 -> PRINT TRANSACTION LOGS\n\t2 -> PERFORM UPDATES\n\t3 -> ACCOUNTS MANAGEMENT\n\t4 -> CHANGE PASSWORD\n\n\t  SELECT > ");
-					nSel = validIpt(-1, 4);
+					printf("\n\t1 -> PRINT TRANSACTION LOGS\n\t2 -> PERFORM UPDATES\n\t3 -> ACCOUNTS MANAGEMENT\n\t4 -> CHANGE PASSWORD\n\n");
+					nSel = validIpt("\tSELECT", -1, 4);
 					switch (nSel) {
 					case 1: //print transaction logs
 						do { //print transaction logs starts
 							printHeader("MAIN MENU > MANAGER MENU > PRINT TRANSACTION LOGS", currMnger->name, 0);
 							printBreak();
-							printf("\n\t1 -> CASH DEPOSIT LOG\n\t2 -> CHEQUE DEPOSIT LOG\n\t3 -> WITHDRAWAL LOG\n\t4 -> FUNDS TRANSFER LOG\n\n\t  SELECT > ");
-							nSel = validIpt(-1, 4);
+							printf("\n\t1 -> CASH DEPOSIT LOG\n\t2 -> CHEQUE DEPOSIT LOG\n\t3 -> WITHDRAWAL LOG\n\t4 -> FUNDS TRANSFER LOG\n\n");
+							nSel = validIpt("\tSELECT", -1, 4);
 							switch (nSel) {
 							case 1: //cash deposit log
 								cash_log(cashdp);
@@ -217,8 +217,8 @@ int main() {
 						do { //perform updates starts
 							printHeader("MAIN MENU > MANAGER MENU > PERFORM UPDATES", currMnger->name, 0);
 							printBreak();
-							printf("\n\t1 -> CHEQUE CLEARING\n\t2 -> HIGH WITHDRAWALS ALERT\n\n\t  SELECT > ");
-							nSel = validIpt(-1, 2);
+							printf("\n\t1 -> CHEQUE CLEARING\n\t2 -> HIGH WITHDRAWALS ALERT\n\n");
+							nSel = validIpt("\tSELECT", -1, 2);
 							switch (nSel) {
 							case 1: //cheque clearings
 								cheque_clear(chequedp, cust, custCount);
@@ -239,8 +239,8 @@ int main() {
 						do { //accounts management starts
 							printHeader("MAIN MENU > MANAGER MENU > ACCOUNTS MANAGEMENT", currMnger->name, 0);
 							printBreak();
-							printf("\n\t1 -> UNLOCK ACCOUNT\n\t2 -> REGISTER FOR NEW CUSTOMER\n\n\t  SELECT > ");
-							nSel = validIpt(-1, 2);
+							printf("\n\t1 -> UNLOCK ACCOUNT\n\t2 -> REGISTER FOR NEW CUSTOMER\n\n");
+							nSel = validIpt("\tSELECT", -1, 2);
 							switch (nSel) {
 							case 1: //unlock account
 								unlockAcc(cust, custCount);
@@ -312,8 +312,8 @@ int main() {
 	//update the latest data into the files respectively
 	writeF(test, cust, custCount);
 	writeF(custINF, cust, custCount);
-	writeF(test2, mnger, mngerCount);
 	writeF(mngerINF, mnger, mngerCount);
+	writeF(test2, mnger, mngerCount);
 
 	printf("\n\n------------------------------<SYSTEM TERMINATED>------------------------------\n\n");
 

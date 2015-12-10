@@ -23,8 +23,6 @@ int main() {
 	//core file pointers
 	FILE *custINF;
 	FILE *mngerINF;
-	FILE *test = fopen("test.txt", "w+");
-	FILE *test2 = fopen("test2.txt", "w+");
 
 	//variables for deposits
 	FILE *cashdp = fopen("CashDeposits.dat", "a+b");
@@ -310,10 +308,8 @@ int main() {
 	}
 
 	//update the latest data into the files respectively
-	writeF(test, cust, custCount);
 	writeF(custINF, cust, custCount);
 	writeF(mngerINF, mnger, mngerCount);
-	writeF(test2, mnger, mngerCount);
 
 	printf("\n\n------------------------------<SYSTEM TERMINATED>------------------------------\n\n");
 
@@ -328,8 +324,6 @@ int main() {
 	fclose(transOUTF);
 	fclose(cashdp);
 	fclose(chequedp);
-	fclose(test);
-	fclose(test2);
 
 	return 0;
 }

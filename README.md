@@ -1,5 +1,5 @@
 # PCD2-assgmt
-ALL FUNCTIONS BELOW ARE <strong>UPLOADED</strong> ONTO HERE
+ALL FUNCTIONS BELOW HAVE <strong>UPLOADED</strong> ONTO HERE
 <h1>SYSTEM'S FEATURES</h1>
 
 <h3><strong>Main Menu</strong></h3>

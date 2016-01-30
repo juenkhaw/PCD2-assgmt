@@ -10,6 +10,8 @@
 int main() {
 	printf("\n\tINITIALIZING...\n");
 
+	//ANOTHER TEST
+
 	//core variables
 	int custCount = 0, mngerCount = 0;
 	int nSel = 0, nATM = 0;

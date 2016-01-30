@@ -8,13 +8,6 @@
 #include "struct.h"
 
 int main() {
-
-	/*
-	GIT TESTING -->
-	ADDED SOMETHING HERE-->
-	TRYING TO PUSH THE COMMIT ONTO THE 'doge-test' BRANCH -->
-	*/
-
 	printf("\n\tINITIALIZING...\n");
 
 	//core variables
